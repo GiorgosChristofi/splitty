@@ -77,7 +77,7 @@ class ExpenseServiceTest {
         Expense mockExpense = new Expense("mockExpense", 100,
             null, mockEvent, null);
         mockEvent.addExpense(mockExpense);
-        when(mockExpenseRepository.findById(anyString()))
+        when(mockExpenseRepository.findById(mockExpense.getId()))
             .thenReturn(Optional.of(mockExpense));
         mockExpenseService.deleteExpense(mockExpense.getId());
         assertFalse(mockEvent.getExpenses().contains(mockExpense));

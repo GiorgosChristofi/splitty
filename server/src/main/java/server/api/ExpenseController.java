@@ -61,9 +61,7 @@ public class ExpenseController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteExpenseFromEvent(@PathVariable ("id") String id) {
-        boolean del = expenseService.deleteExpense(id);
-        if(del)
-            return ResponseEntity.ok().build();
-        return ResponseEntity.notFound().build();
+        expenseService.deleteExpense(id);
+        return ResponseEntity.ok().build();
     }
 }
