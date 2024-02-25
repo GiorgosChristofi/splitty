@@ -43,7 +43,7 @@ class ExpenseServiceTest {
         when(mockExpenseRepository.findByEventId(anyString()))
             .thenReturn(expectedExpenses);
         List<Expense> actualExpenses =
-            mockExpenseService.getAllExpensesForEvent(eventId);
+            mockExpenseService.getAllExpenses(eventId);
         assertEquals(expectedExpenses, actualExpenses);
     }
 
@@ -61,7 +61,7 @@ class ExpenseServiceTest {
         when(mockExpenseRepository.findByEventId(anyString()))
             .thenReturn(expectedExpenses);
         List<Expense> actualExpenses = mockExpenseService
-            .getAllExpensesForEvent(eventId);
+            .getAllExpenses(eventId);
         int sum = 0;
         for (Expense actualExpense : actualExpenses)
             sum += actualExpense.getPriceInCents();
@@ -69,7 +69,7 @@ class ExpenseServiceTest {
     }
 
     /**
-     * Tests the getExpensesForEvents
+     * Tests the deleteExpense for one deletion
      */
     @Test
     public void deleteExpenseTest() {
@@ -81,5 +81,27 @@ class ExpenseServiceTest {
             .thenReturn(Optional.of(mockExpense));
         mockExpenseService.deleteExpense(mockExpense.getId());
         assertFalse(mockEvent.getExpenses().contains(mockExpense));
+    }
+
+    /**
+     * Tests the deleteExpense for more than one deletion
+     */
+    @Test
+    public void deleteMultipleExpensesTest() {
+        Event mockEvent = new Event("Sample Event");
+        Expense expense1 = new Expense("mockExpense1", 100,
+            null, mockEvent, null);
+        Expense expense2 = new Expense("mockExpense2", 200,
+            null, mockEvent, null);
+        mockEvent.addExpense(expense1);
+        mockEvent.addExpense(expense2);
+        when(mockExpenseRepository.findById(expense1.getId()))
+            .thenReturn(Optional.of(expense1));
+        when(mockExpenseRepository.findById(expense2.getId()))
+            .thenReturn(Optional.of(expense2));
+        mockExpenseService.deleteExpense(expense1.getId());
+        mockExpenseService.deleteExpense(expense2.getId());
+        assertFalse(mockEvent.getExpenses().contains(expense1));
+        assertFalse(mockEvent.getExpenses().contains(expense2));
     }
 }

@@ -31,7 +31,7 @@ public class ExpenseService {
      * @param eventId the id by which we find the event
      * @param expense the specific expense for that event
      */
-    public void addExpenseToEvent(String eventId, Expense expense) {
+    public void addExpense(String eventId, Expense expense) {
         Optional<Event> opEvent = eventRepository.findById(eventId);
         if (opEvent.isEmpty())
             throw new IllegalArgumentException("Event not found");
@@ -47,7 +47,7 @@ public class ExpenseService {
      * @param eventId the id by which we find the event
      * @return a list of all the expenses of the specific event
      */
-    public List<Expense> getAllExpensesForEvent(String eventId) {
+    public List<Expense> getAllExpenses(String eventId) {
         return expenseRepository.findByEventId(eventId);
     }
 
@@ -58,8 +58,8 @@ public class ExpenseService {
      * @return the total of all the expenses of the specific event
      * in cents
      */
-    public int calculateTotalExpensesForEvent(String eventId) {
-        List<Expense> expenses = getAllExpensesForEvent(eventId);
+    public int calculateTotalExpenses(String eventId) {
+        List<Expense> expenses = getAllExpenses(eventId);
         return expenses.stream().mapToInt(Expense::getPriceInCents).sum();
     }
 
