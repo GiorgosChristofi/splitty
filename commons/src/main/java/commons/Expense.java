@@ -13,7 +13,7 @@ import java.util.Date;
 public class Expense{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String id;
     private String name;
     private int priceInCents;
     private Date date;
@@ -33,7 +33,7 @@ public class Expense{
         this.owedTo = owedTo;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
