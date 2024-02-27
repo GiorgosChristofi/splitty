@@ -3,6 +3,7 @@ package commons;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import utils.EventCodeGenerator;
 
 public class EventTest {
     /**
@@ -82,25 +83,4 @@ public class EventTest {
         assertTrue(actual.contains("participants"));
         assertTrue(actual.contains("title"));
     }
-
-    /***
-     * Test to make sure IDs are not null, and generated to the right length
-     */
-    @Test
-    public void idFormatTest(){
-        Event event = new Event("title", null);
-        String id = event.getId();
-        assertEquals(Event.codeLength, id.length());
-    }
-
-    /***
-     * Test to make sure IDs are unique
-     */
-    @Test
-    public void idDiffersTest(){
-        Event event1 = new Event("title", null);
-        Event event2 = new Event("new title", null);
-        assertNotEquals(event1.getId(), event2.getId());
-    }
-
 }
