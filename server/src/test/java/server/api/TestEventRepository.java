@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import server.database.EventRepository;
+import utils.EventCodeGenerator;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -101,6 +102,7 @@ public class TestEventRepository implements EventRepository {
     @Override
     public <S extends Event> S save(S entity) {
         calledMethods.add("save");
+        entity.setId(EventCodeGenerator.generateID());
         events.add(entity);
         return entity;
     }

@@ -11,14 +11,12 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
 public class Event{
     @Id
     @GenericGenerator(name = "id", strategy = "utils.EventCodeGenerator")
     @GeneratedValue(generator = "id")
-    @Column(name="id")
     private String id;
     private String title;
     private Date creationDate;
@@ -35,6 +33,10 @@ public class Event{
         this.participants = new HashSet<>();
         this.expenses = new HashSet<>();
         this.creationDate = creationDate;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getId() {

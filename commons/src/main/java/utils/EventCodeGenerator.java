@@ -1,10 +1,8 @@
 package utils;
 
-import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
-import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class EventCodeGenerator implements IdentifierGenerator {
@@ -13,9 +11,7 @@ public class EventCodeGenerator implements IdentifierGenerator {
     public static final int codeLength = 6;
     // 32^6 = 1,073,741,824 combinations
 
-    @Override
-    public Serializable generate(SharedSessionContractImplementor session, Object object)
-            throws HibernateException {
+    public static String generateID(){
         int maxRandomBound = validCharacters.length;
         ThreadLocalRandom random = ThreadLocalRandom.current();
         StringBuilder stringBuilder = new StringBuilder();
@@ -27,5 +23,10 @@ public class EventCodeGenerator implements IdentifierGenerator {
         }
 
         return stringBuilder.toString();
+    }
+
+    @Override
+    public Object generate(SharedSessionContractImplementor session, Object object) {
+        return generateID();
     }
 }
