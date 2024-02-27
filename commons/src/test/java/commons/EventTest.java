@@ -3,7 +3,6 @@ package commons;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import utils.EventCodeGenerator;
 
 public class EventTest {
     /**
@@ -82,5 +81,29 @@ public class EventTest {
         assertTrue(actual.contains("id"));
         assertTrue(actual.contains("participants"));
         assertTrue(actual.contains("title"));
+    }
+
+    /**
+     * Test for ID getter and setter
+     */
+    @Test
+    public void setterGetterIdCheck(){
+        String id = "ABC123";
+        Event event = new Event("title", null);
+        event.setId(id);
+        assertEquals(id, event.getId());
+    }
+
+    /**
+     * THIS TEST IS SPECIAL!
+     * Using @GenericGenerator means that the ID is generated AFTER SAVING TO A REPOSITORY!
+     * Some code (including the TestEventRepository) has been modified to reflect this so that IDs aren't null
+     * if not actually saving them.
+     * If this test fails, something has changed with Hibernate and JPA... let @kluszczyk know
+     */
+    @Test
+    public void idGeneratorImplementationChecker(){
+        Event event = new Event("title", null);
+        assertNull(event.getId());
     }
 }
