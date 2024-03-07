@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 import commons.Event;
 import jakarta.ws.rs.BadRequestException;
 import javafx.beans.property.StringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -42,8 +41,6 @@ public class StartupScreenCtrl implements Initializable {
     private Button joinEventButton;
     @FXML
     private Button createEventButton;
-    @FXML
-    private Button managementOverviewButton;
     @FXML
     private Label createEventLabel;
     @FXML
@@ -354,10 +351,5 @@ public class StartupScreenCtrl implements Initializable {
             Event event = server.getEvent(id);
             addToHistory(event);
         }
-     * switch to the management overview password (log in) scene
-     * @param actionEvent on button press go to another scene
-     */
-    public void goToTheManagementOverview(ActionEvent actionEvent) {
-        mainCtrl.switchToMnagamentOverviewPasswordScreen();
     }
 }
