@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Participant{
+public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

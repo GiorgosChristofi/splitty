@@ -23,7 +23,7 @@ public class ExpenseController {
      * @param expense maps the expense to the specific even specified by the ID
      * @return the status of the task
      */
-    @PostMapping("/{eventId}/expenses")
+    @PostMapping("/{eventId}/added-expense")
     public ResponseEntity<Void> addExpenseToEvent(@PathVariable String eventId, @RequestBody
     Expense expense) {
         expenseService.addExpense(eventId, expense);

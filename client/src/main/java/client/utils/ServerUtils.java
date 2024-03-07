@@ -27,6 +27,8 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import commons.Event;
+import commons.Expense;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -107,4 +109,137 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.put(Entity.entity(title, APPLICATION_JSON), Event.class);
 	}
+
+	/**
+	 * Sends a POST request to add an expense to a specific event
+	 * @param eventId the id of the specific event
+	 * @param expense the expense to be added
+	 * @return the expense that was added
+	 */
+	public Expense addExpense(String eventId, Expense expense) {
+		return ClientBuilder.newClient()
+			.target(serverURL)
+			.path("api/expenses/" + eventId + "/added-expenses")
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+	}
+
+	/**
+	 * Sends a GET request to get a list of expenses for a specific event
+	 * @param eventId the id of the event for which we want to get the expenses
+	 * @return the list of expenses for the specific event
+	 */
+	public List<Expense> getExpensesForEvent(String eventId) {
+		return ClientBuilder.newClient()
+			.target(serverURL).path("api/expenses/" + eventId + "/expenses")
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.get(new GenericType<List<Expense>>() {});
+	}
+
+	/**
+	 * Sends a GET request to get the sum of all the expenses
+	 * @param eventId the event for which we want to retrieve the
+	 * total expenses
+	 * @return a double representing the total expenses
+	 */
+	public double getTotalExpensesForEvent(String eventId) {
+		return ClientBuilder.newClient()
+			.target(serverURL).path("api/expenses/" + eventId + "/total-expenses")
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.get(Double.class);
+	}
+
+	/**
+	 * Sends a DELETE request to delete the specific expense
+	 * @param expenseId the id of the expense we want to delete
+	 */
+	public void deleteExpenseForEvent(String expenseId) {
+		Response response = ClientBuilder.newClient()
+			.target(serverURL)
+			.path("api/expenses/" + expenseId)
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.delete();
+		if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
+			System.out.println("Expense deleted successfully.");
+		} else {
+			System.out.println("Failed to delete expense. Status code: " + response.getStatus());
+		}
+	}
+
+	/**
+	 * Sends a PUT request to modify an existing expense
+	 * @param expenseId the id of the expense we want to change
+	 * @param expense the expense we want the current expense to be updated to
+	 * @return the new expense
+	 */
+	public Expense editExpense(String expenseId, Expense expense) {
+		return ClientBuilder.newClient()
+			.target(serverURL)
+			.path("api/expenses" + expenseId)
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+	}
+	
+	//TODO Test weather or not the methods actually work in cae of problems like(expense doesn't exist)
+	/**
+	 * checks if a password matches with the one randomly generated
+	 * @param inputPassword the password the user inputs to log in to the management overview
+	 * @return a boolean, true or false whether the password matches or not
+	 */
+	public Boolean checkPassword(String inputPassword){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(serverURL).path("api/password/" + inputPassword)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(Boolean.class);
+	}
+
+	/**
+	 * retrieves all events from the server
+	 * @return all the events from the server
+	 */
+	public List<Event> retrieveAllEvents(){
+		List<Event> events = ClientBuilder.newClient(new ClientConfig())
+				.target(serverURL).path("api/events/all")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<List<Event>>(){});
+		return events;
+	}
 }
+//<<<<<<< HEAD
+//=======
+//	 * checks if a password matches with the one randomly generated
+//	 * @param inputPassword the password the user inputs to log in to the management overview
+//	 * @return a boolean, true or false whether the password matches or not
+//	 */
+//	public Boolean checkPassword(String inputPassword){
+//		return ClientBuilder.newClient(new ClientConfig())
+//				.target(serverURL).path("api/password/" + inputPassword)
+//				.request(APPLICATION_JSON)
+//				.accept(APPLICATION_JSON)
+//				.get(Boolean.class);
+//	}
+//
+//	/**
+//	 * retrieves all events from the server
+//	 * @return all the events from the server
+//	 */
+//	public List<Event> retrieveAllEvents(){
+//		List<Event> events = ClientBuilder.newClient(new ClientConfig())
+//				.target(serverURL).path("api/events/all")
+//				.request(APPLICATION_JSON)
+//				.accept(APPLICATION_JSON)
+//				.get(new GenericType<List<Event>>(){});
+//		return events;
+//	}
+//}
+//>>>>>>> f44636ade21418766ccf2f94676bd351ba0ecd6b
+//=======
+//
+//>>>>>>> SolveConflicts

@@ -5,7 +5,9 @@ import client.utils.Translation;
 import com.google.inject.Inject;
 import commons.Event;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.HEAD;
 import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -43,6 +45,8 @@ public class StartupScreenCtrl implements Initializable {
     private Button joinEventButton;
     @FXML
     private Button createEventButton;
+    @FXML
+    private Button managementOverviewButton;
     @FXML
     private Label createEventLabel;
     @FXML
@@ -273,6 +277,7 @@ public class StartupScreenCtrl implements Initializable {
     }
 
     /**
+<<<<<<< HEAD
      * Gets the text from a given textfield
      * @param textBox the textfield to get the text from
      * @return String the text from the textfield
@@ -323,5 +328,12 @@ public class StartupScreenCtrl implements Initializable {
      */
     public HashMap<HBox, Event> gethBoxEventHashMap() {
         return hBoxEventHashMap;
+    }
+    /**
+     * switch to the management overview password (log in) scene
+     * @param actionEvent on button press go to another scene
+     */
+    public void goToTheManagementOverview(ActionEvent actionEvent) {
+        mainCtrl.switchToMnagamentOverviewPasswordScreen();
     }
 }

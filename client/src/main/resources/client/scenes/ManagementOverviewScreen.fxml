@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="664.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManagementOverviewScreenCtrl">
+   <children>
+      <Button fx:id="homeScreenButton" layoutX="21.0" layoutY="623.0" mnemonicParsing="false" onAction="#goBackToHomeScreen" prefHeight="30.0" prefWidth="32.0" />
+      <Label fx:id="MOTitle" alignment="CENTER" layoutX="199.0" layoutY="18.0" prefHeight="40.0" prefWidth="614.0" text="Management Overview">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <ListView fx:id="eventsListView" layoutX="37.0" layoutY="112.0" onMouseClicked="#selectEvent" prefHeight="494.0" prefWidth="267.0" />
+      <Label fx:id="eventsLabel" layoutX="39.0" layoutY="68.0" prefHeight="40.0" prefWidth="164.0" text="Events">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
+      <Label fx:id="participantsLabel" layoutX="323.0" layoutY="70.0" prefHeight="40.0" prefWidth="267.0" text="Participants in selected event">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ListView fx:id="participantsListView" layoutX="322.0" layoutY="112.0" prefHeight="180.0" prefWidth="267.0" />
+      <Label fx:id="expensesLabel" layoutX="322.0" layoutY="307.0" prefHeight="40.0" prefWidth="267.0" text="Expenses in selected event">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <ListView fx:id="expensesListview" layoutX="322.0" layoutY="359.0" prefHeight="247.0" prefWidth="319.0" />
+   </children>
+</AnchorPane>

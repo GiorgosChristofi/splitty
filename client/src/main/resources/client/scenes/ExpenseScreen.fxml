@@ -14,26 +14,26 @@
          <font>
             <Font size="18.0" />
          </font></Label>
-      <ComboBox fx:id="choosePayer" layoutX="169.0" layoutY="127.0" prefHeight="26.0" prefWidth="224.0" />
+      <ComboBox fx:id="choosePayer" layoutX="169.0" layoutY="127.0" prefHeight="26.0" prefWidth="264.0" />
       <Label fx:id="purpose" layoutX="44.0" layoutY="183.0" text="Purpose">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="expensePurpose" layoutX="169.0" layoutY="184.0" prefHeight="26.0" prefWidth="224.0" />
+      <TextField fx:id="expensePurpose" layoutX="169.0" layoutY="184.0" prefHeight="26.0" prefWidth="264.0" promptText="Purpose" />
       <Label fx:id="amount" layoutX="44.0" layoutY="245.0" text="Amount">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="sum" layoutX="169.0" layoutY="246.0" prefHeight="26.0" prefWidth="171.0" />
-      <ComboBox fx:id="currency" layoutX="340.0" layoutY="246.0" prefHeight="26.0" prefWidth="130.0" />
+      <TextField fx:id="sum" layoutX="169.0" layoutY="246.0" prefHeight="26.0" prefWidth="171.0" promptText="Amount" />
+      <ComboBox fx:id="currency" layoutX="340.0" layoutY="246.0" prefHeight="26.0" prefWidth="90.0" />
       <Label fx:id="date" layoutX="44.0" layoutY="307.0" text="Date">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <DatePicker fx:id="datePicker" layoutX="169.0" layoutY="308.0" prefHeight="26.0" prefWidth="224.0" />
+      <DatePicker fx:id="datePicker" layoutX="169.0" layoutY="308.0" prefHeight="26.0" prefWidth="264.0" promptText="dd/mm/yyyy" />
       <Label fx:id="splitMethod" layoutX="44.0" layoutY="363.0" text="Split method">
          <font>
             <Font size="18.0" />
