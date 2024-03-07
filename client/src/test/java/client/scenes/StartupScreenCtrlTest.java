@@ -11,10 +11,7 @@ import javafx.scene.layout.HBox;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -99,13 +96,11 @@ public class StartupScreenCtrlTest{
     public void testRemoveFromHistoryIfExists(){
         HBox hBox = null;
         Event event = new Event();
-        sut.gethBoxEventHashMap().put(hBox, event);
-        sut.getEventHBoxHashMap().put(event, hBox);
-        assertFalse(sut.gethBoxEventHashMap().isEmpty());
-        assertFalse(sut.getEventHBoxHashMap().isEmpty());
+        AbstractMap.SimpleEntry<Event, HBox> entry = new AbstractMap.SimpleEntry<>(event, hBox);
+        sut.getEventsAndHBoxes().add(entry);
+        assertFalse(sut.getEventsAndHBoxes().isEmpty());
         sut.removeFromHistoryIfExists(event);
-        assertTrue(sut.gethBoxEventHashMap().isEmpty());
-        assertTrue(sut.getEventHBoxHashMap().isEmpty());
+        assertTrue(sut.getEventsAndHBoxes().isEmpty());
     }
 
     private class TestServerUtils extends ServerUtils{

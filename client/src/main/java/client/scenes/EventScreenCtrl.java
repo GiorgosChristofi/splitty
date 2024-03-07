@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -255,6 +254,6 @@ public class EventScreenCtrl implements Initializable{
      * @param actionEvent when button is clicked
      */
     public void switchToMainScreen(ActionEvent actionEvent) {
-        mainCtrl.switchBackToMainScreen();
+        mainCtrl.showMainScreen();
     }
 }

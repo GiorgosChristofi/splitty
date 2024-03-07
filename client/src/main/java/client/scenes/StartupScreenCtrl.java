@@ -23,9 +23,7 @@ import javafx.scene.layout.VBox;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static javafx.geometry.Pos.CENTER_LEFT;
 public class StartupScreenCtrl implements Initializable {
@@ -52,9 +50,7 @@ public class StartupScreenCtrl implements Initializable {
     @FXML
     private Label joinEventLabel;
 
-    private HashMap<Event, HBox> eventHBoxHashMap;
-    private HashMap<HBox, Event> hBoxEventHashMap;
-
+    private List<AbstractMap.SimpleEntry<Event, HBox>> eventsAndHBoxes;
     private Translation translation;
 
     /**
@@ -68,8 +64,7 @@ public class StartupScreenCtrl implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.translation = translation;
-        eventHBoxHashMap = new HashMap<>();
-        hBoxEventHashMap = new HashMap<>();
+        eventsAndHBoxes = new ArrayList<>();
     }
 
     /**
@@ -125,6 +120,14 @@ public class StartupScreenCtrl implements Initializable {
      */
     public void joinEvent(Event event){
         mainCtrl.joinEvent(event);
+        addToHistory(event);
+    }
+
+    /**
+     * Adds the event to the history
+     * @param event the event to add to the history
+     */
+    private void addToHistory(Event event) {
         Label eventLabel = generateLabelForEvent(event);
         try{
             ImageView imageView = generateRemoveButton(eventLabel);
@@ -132,18 +135,49 @@ public class StartupScreenCtrl implements Initializable {
             removeFromHistoryIfExists(event);
             List<Node> recentlyViewedEvents = recentlyViewedEventsVBox.getChildren();
             recentlyViewedEvents.addFirst(hbox);
-            eventHBoxHashMap.put(event, hbox);
-            hBoxEventHashMap.put(hbox, event);
+            eventsAndHBoxes.add(new AbstractMap.SimpleEntry<>(event, hbox));
             if (recentlyViewedEventsVBox.getChildren().size() > 5){
                 HBox lastHBox = (HBox) recentlyViewedEvents.getLast();
-                Event removedEvent = hBoxEventHashMap.remove(lastHBox);
-                eventHBoxHashMap.remove(removedEvent);
-                hBoxEventHashMap.remove(lastHBox);
-                recentlyViewedEvents.removeLast();
+                Event removedEvent = getEntryFromEventHbox(lastHBox).getKey();
+                removeFromHistoryIfExists(removedEvent);
             }
         }catch (FileNotFoundException e){
             System.out.println("File was not found!");
         }
+    }
+    /**
+     * Gets the entry from the eventHBoxHashMap
+     * @param event the event to get the entry for
+     * @return the entry
+     */
+    public AbstractMap.SimpleEntry<Event, HBox> getEntryFromEventHbox(Event event){
+        for (AbstractMap.SimpleEntry<Event, HBox> entry : eventsAndHBoxes){
+            if (entry.getKey().equals(event)){
+                return entry;
+            }
+        }
+        return null;
+    }
+    /**
+     * Gets the entry from the eventHBoxHashMap
+     * @param hBox the HBox to get the entry for
+     * @return the entry
+     */
+    public AbstractMap.SimpleEntry<Event, HBox> getEntryFromEventHbox(HBox hBox){
+        for (AbstractMap.SimpleEntry<Event, HBox> entry : eventsAndHBoxes){
+            if (entry.getValue().equals(hBox)){
+                return entry;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Getter for eventsAndHBoxes
+     * @return eventsAndHBoxes
+     */
+    public List<AbstractMap.SimpleEntry<Event, HBox>> getEventsAndHBoxes() {
+        return eventsAndHBoxes;
     }
 
     /**
@@ -151,23 +185,12 @@ public class StartupScreenCtrl implements Initializable {
      * @param event the event to remove the history of
      */
     public void removeFromHistoryIfExists(Event event){
-        if (eventHBoxHashMap.containsKey(event)){
-            HBox hBox = eventHBoxHashMap.get(event);
-            eventHBoxHashMap.remove(event);
-            hBoxEventHashMap.remove(hBox);
+        AbstractMap.SimpleEntry<Event, HBox> entry = getEntryFromEventHbox(event);
+        if (getEntryFromEventHbox(event) != null){
+            HBox hBox = entry.getValue();
+            eventsAndHBoxes.remove(entry);
             if (hBox != null){
                 removeFromVBox(hBox.idProperty());
-            }
-        }else{
-            for (Event e : eventHBoxHashMap.keySet()){
-                if (e.getId().equals(event.getId())){
-                    HBox hBox = eventHBoxHashMap.get(e);
-                    eventHBoxHashMap.remove(e);
-                    hBoxEventHashMap.remove(hBox);
-                    if (hBox != null){
-                        removeFromVBox(hBox.idProperty());
-                    }
-                }
             }
         }
     }
@@ -277,7 +300,6 @@ public class StartupScreenCtrl implements Initializable {
     }
 
     /**
-<<<<<<< HEAD
      * Gets the text from a given textfield
      * @param textBox the textfield to get the text from
      * @return String the text from the textfield
@@ -315,19 +337,24 @@ public class StartupScreenCtrl implements Initializable {
     }
 
     /**
-     * Getter for eventHBoxHashMap
-     * @return eventHBoxHashMap
+     * Refreshes the events in the history
      */
-    public HashMap<Event, HBox> getEventHBoxHashMap() {
-        return eventHBoxHashMap;
-    }
-
-    /**
-     * Getter for hBoxEventHashMap
-     * @return hBoxEventHashMap
-     */
-    public HashMap<HBox, Event> gethBoxEventHashMap() {
-        return hBoxEventHashMap;
+    public void refreshEvents() {
+        List<String> eventIds = new ArrayList<>();
+        List<Map.Entry<Event, HBox>> entries = new ArrayList<>();
+        for (Map.Entry<Event, HBox> entry : eventsAndHBoxes) {
+            eventIds.add(entry.getKey().getId());
+            entries.add(entry);
+        }
+        for (Map.Entry<Event, HBox> entry : entries) {
+            removeFromHistoryIfExists(entry.getKey());
+        }
+        eventsAndHBoxes.clear();
+        recentlyViewedEventsVBox.getChildren().clear();
+        for (String id : eventIds) {
+            Event event = server.getEvent(id);
+            addToHistory(event);
+        }
     }
     /**
      * switch to the management overview password (log in) scene

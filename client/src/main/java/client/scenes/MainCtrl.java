@@ -61,15 +61,14 @@ public class MainCtrl {
 
         this.editTitleCtrl = editTitlePair.getKey();
         this.editTitleScene = new Scene(editTitlePair.getValue());
-
+        showMainScreen();
         this.managementOvervirewPasswordScene = new Scene(managementOverviewPassworrdUI.getValue());
         this.managementOverviewScreenScene = new Scene(managementOverviewScreenUI.getValue());
-
-        showOverview();
         primaryStage.show();
     }
 
-    public void showOverview() {
+    public void showMainScreen() {
+        startupScreenCtrl.refreshEvents();
         primaryStage.setTitle("Main Menu");
         primaryStage.setScene(startupScene);
     }
