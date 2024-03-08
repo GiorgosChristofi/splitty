@@ -66,6 +66,7 @@ public class ExpenseScreenCtrl implements Initializable{
     private Event currentEvent;
     private final Translation translation;
     private Set<Participant> participants;
+    private Expense currentExpense;
     @Inject
     public ExpenseScreenCtrl (ServerUtils server, MainCtrl mainCtrl,
                               Translation translation) {
@@ -216,14 +217,31 @@ public class ExpenseScreenCtrl implements Initializable{
         // I'd suggest doing something with currentEvent.getParticipants()
         Participant participant = null;
         System.out.println(currentEvent.getId());
-        return server.addExpense(currentEvent.getId(),
-            new Expense(name, priceInCents, expenseDate, currentEvent, participant));
+        currentExpense = new Expense(name, priceInCents, expenseDate, currentEvent, participant);
+        return currentExpense;
+    }
+
+    public void addExpenseToServer() {
+        server.addExpense(currentEvent.getId(),
+            currentExpense);
+    }
+
+    public Expense editExpenseOnServer() {
+        return server.editExpense(currentExpense.getId(), createNewExpense());
     }
     /**
      * Needs revision
      */
     public void addExpenseToEvenScreen(ActionEvent actionEvent) {
         System.out.println(createNewExpense());
+        addExpenseToServer();
+        mainCtrl.addExpenseToScreen(currentExpense);
+        mainCtrl.joinEvent(currentEvent);
+    }
+
+    public void editExpenseFormEventScreen() {
+        currentExpense = editExpenseOnServer();
+        mainCtrl.editExpenseToScreen(currentExpense);
         mainCtrl.joinEvent(currentEvent);
     }
 

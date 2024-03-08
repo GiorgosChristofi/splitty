@@ -94,4 +94,15 @@ public class Expense{
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 
+    public double changeToEuro() {
+        return Math.ceil((double)(priceInCents/100));
+    }
+
+    public String eventScreenString() {
+        if(owedTo != null)
+            return  owedTo.getName() + " paid " + changeToEuro() + " for " + event.getTitle();
+        return  "Somebody paid " + changeToEuro() + " for " + event.getTitle();
+
+    }
+
 }

@@ -156,7 +156,7 @@ public class ServerUtils {
 	 * Sends a DELETE request to delete the specific expense
 	 * @param expenseId the id of the expense we want to delete
 	 */
-	public void deleteExpenseForEvent(String expenseId) {
+	public void deleteExpenseForEvent(long expenseId) {
 		Response response = ClientBuilder.newClient()
 			.target(serverURL)
 			.path("api/expenses/" + expenseId)
@@ -176,7 +176,7 @@ public class ServerUtils {
 	 * @param expense the expense we want the current expense to be updated to
 	 * @return the new expense
 	 */
-	public Expense editExpense(String expenseId, Expense expense) {
+	public Expense editExpense(long expenseId, Expense expense) {
 		return ClientBuilder.newClient()
 			.target(serverURL)
 			.path("api/expenses" + expenseId)
@@ -212,34 +212,3 @@ public class ServerUtils {
 		return events;
 	}
 }
-//<<<<<<< HEAD
-//=======
-//	 * checks if a password matches with the one randomly generated
-//	 * @param inputPassword the password the user inputs to log in to the management overview
-//	 * @return a boolean, true or false whether the password matches or not
-//	 */
-//	public Boolean checkPassword(String inputPassword){
-//		return ClientBuilder.newClient(new ClientConfig())
-//				.target(serverURL).path("api/password/" + inputPassword)
-//				.request(APPLICATION_JSON)
-//				.accept(APPLICATION_JSON)
-//				.get(Boolean.class);
-//	}
-//
-//	/**
-//	 * retrieves all events from the server
-//	 * @return all the events from the server
-//	 */
-//	public List<Event> retrieveAllEvents(){
-//		List<Event> events = ClientBuilder.newClient(new ClientConfig())
-//				.target(serverURL).path("api/events/all")
-//				.request(APPLICATION_JSON)
-//				.accept(APPLICATION_JSON)
-//				.get(new GenericType<List<Event>>(){});
-//		return events;
-//	}
-//}
-//>>>>>>> f44636ade21418766ccf2f94676bd351ba0ecd6b
-//=======
-//
-//>>>>>>> SolveConflicts
