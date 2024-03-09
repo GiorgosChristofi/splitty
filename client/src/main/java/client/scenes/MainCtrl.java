@@ -123,8 +123,9 @@ public class MainCtrl {
         expenseScreenCtrl.setEvent(eventScreenCtrl.getEvent());
         primaryStage.setScene(expenseScene);
     }
-    public void switchToEditExpense() {
+    public void switchToEditExpense(Expense expense) {
         expenseScreenCtrl.setEvent(eventScreenCtrl.getEvent());
+        expenseScreenCtrl.setCurrentExpense(expense);
         primaryStage.setScene(expenseScene);
     }
 

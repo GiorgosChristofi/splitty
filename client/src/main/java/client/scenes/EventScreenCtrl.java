@@ -175,8 +175,8 @@ public class EventScreenCtrl implements Initializable{
         //System.out.println(event.toString());
     }
 
-    public void editExpense() {
-        mainCtrl.switchToEditExpense();
+    public void editExpense(Expense expense) {
+        mainCtrl.switchToEditExpense(expense);
     }
 
     /**
@@ -278,9 +278,8 @@ public class EventScreenCtrl implements Initializable{
         expensesVBox.getChildren().add(expenseLabel);
         expenseLabel.setOnMouseClicked(
             mouseEvent -> {
-                //Expense clickedExpense = event.getExpenses()
-                //server.deleteExpenseForEvent();
-                editExpense();
+                expensesVBox.getChildren().remove(expenseLabel);
+                editExpense(expense);
             }
         );
         expenseLabel.setOnMouseEntered(

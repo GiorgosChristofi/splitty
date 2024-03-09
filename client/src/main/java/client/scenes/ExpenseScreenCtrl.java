@@ -67,12 +67,14 @@ public class ExpenseScreenCtrl implements Initializable{
     private final Translation translation;
     private Set<Participant> participants;
     private Expense currentExpense;
+    private int expenseIndex;
     @Inject
     public ExpenseScreenCtrl (ServerUtils server, MainCtrl mainCtrl,
                               Translation translation) {
         this.mainCtrl = mainCtrl;
         this.translation = translation;
         this.server = server;
+        this.expenseIndex = 0;
         //currency.setItems(FXCollections.observableArrayList("EUR"));
     }
 
@@ -217,33 +219,49 @@ public class ExpenseScreenCtrl implements Initializable{
         // I'd suggest doing something with currentEvent.getParticipants()
         Participant participant = null;
         System.out.println(currentEvent.getId());
-        currentExpense = new Expense(name, priceInCents, expenseDate, currentEvent, participant);
-        return currentExpense;
+        return new Expense(expenseIndex, name, priceInCents, expenseDate, currentEvent, participant);
     }
 
     public void addExpenseToServer() {
+        currentExpense = createNewExpense();
+        expenseIndex++;
         server.addExpense(currentEvent.getId(),
             currentExpense);
     }
 
-    public Expense editExpenseOnServer() {
-        return server.editExpense(currentExpense.getId(), createNewExpense());
+    public void editExpenseOnServer(int index) {
+        currentExpense = createNewExpense();
+        server.editExpense(currentEvent.getExpenseByIndex(index).getId(),
+            createNewExpense());
     }
     /**
      * Needs revision
      */
     public void addExpenseToEvenScreen(ActionEvent actionEvent) {
-        System.out.println(createNewExpense());
-        addExpenseToServer();
+        //System.out.println(createNewExpense());
+        if(currentExpense == null) {
+            addExpenseToServer();
+            currentExpense.setToEdit(true);
+        }
+        else {
+            editExpenseOnServer(currentExpense.getIndex());
+            currentExpense.setToEdit(true);
+        }
         mainCtrl.addExpenseToScreen(currentExpense);
         mainCtrl.joinEvent(currentEvent);
+        currentExpense = null;
     }
 
-    public void editExpenseFormEventScreen() {
-        currentExpense = editExpenseOnServer();
-        mainCtrl.editExpenseToScreen(currentExpense);
-        mainCtrl.joinEvent(currentEvent);
+    public void setCurrentExpense(Expense expense) {
+        currentExpense = expense;
     }
+
+//    public void editExpenseFromEventScreen(ActionEvent actionEvent) {
+//        //currentExpense = createNewExpense();
+//        currentExpense = server.editExpense(currentExpense.getId(), createNewExpense());
+//        mainCtrl.editExpenseToScreen(currentExpense);
+//        mainCtrl.joinEvent(currentEvent);
+//    }
 
     //TODO: 1.Fixing the bindings
     //TODO: 2.Getting the participant that paid (after the participant UI is implemented)

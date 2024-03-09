@@ -179,7 +179,7 @@ public class ServerUtils {
 	public Expense editExpense(long expenseId, Expense expense) {
 		return ClientBuilder.newClient()
 			.target(serverURL)
-			.path("api/expenses" + expenseId)
+			.path("api/expenses/" + expenseId)
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);

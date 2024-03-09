@@ -3,6 +3,7 @@ package commons;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.source.tree.BreakTree;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -15,6 +16,7 @@ public class Expense{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private int index;
     private String name;
     private int priceInCents;
     private Date date;
@@ -23,16 +25,19 @@ public class Expense{
     private Event event;
     @ManyToOne()
     private Participant owedTo;
+    private boolean toEdit;
 
     @SuppressWarnings("unused")
     public Expense() {}
 
-    public Expense(String name, int priceInCents, Date date, Event event, Participant owedTo) {
+    public Expense(int index, String name, int priceInCents, Date date, Event event, Participant owedTo) {
+        this.index = index;
         this.name = name;
         this.priceInCents = priceInCents;
         this.date = date;
         this.event = event;
         this.owedTo = owedTo;
+        this.toEdit = false;
     }
 
     public long getId() {
@@ -96,6 +101,15 @@ public class Expense{
 
     public double changeToEuro() {
         return Math.ceil((double)(priceInCents/100));
+    }
+    public boolean getToEdit() {
+        return this.toEdit;
+    }
+    public void setToEdit(boolean b) {
+        this.toEdit = b;
+    }
+    public int getIndex() {
+        return this.index;
     }
 
     public String eventScreenString() {
