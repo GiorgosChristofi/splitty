@@ -37,8 +37,8 @@ public class ExpenseService {
             throw new IllegalArgumentException("Event not found");
         Event event = opEvent.get();
         expense.setEvent(event);
-        expenseRepository.save(expense);
         event.addExpense(expense);
+        expenseRepository.save(expense);
         eventRepository.save(event);
     }
 
@@ -72,7 +72,6 @@ public class ExpenseService {
         Expense expense = expenseRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("Expense not found"));
         Event event = expense.getEvent();
-        event.getSettledExpenses().add(expense);
         event.removeExpense(expense);
         eventRepository.save(event);
     }

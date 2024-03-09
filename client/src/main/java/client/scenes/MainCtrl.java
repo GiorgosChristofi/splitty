@@ -4,6 +4,7 @@ import client.utils.Translation;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import commons.Event;
+import commons.Expense;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -109,9 +110,22 @@ public class MainCtrl {
         return startupScene;
     }
 
+    public Scene getEventScene() {
+        return eventScene;
+    }
+
+    public Scene getExpenseScene() {
+        return expenseScene;
+    }
+
     public void switchToAddExpense() {
         expenseScreenCtrl.resetAll();
         expenseScreenCtrl.setEvent(eventScreenCtrl.getEvent());
+        primaryStage.setScene(expenseScene);
+    }
+    public void switchToEditExpense(Expense expense) {
+        expenseScreenCtrl.setEvent(eventScreenCtrl.getEvent());
+        expenseScreenCtrl.setCurrentExpense(expense);
         primaryStage.setScene(expenseScene);
     }
 
@@ -145,5 +159,17 @@ public class MainCtrl {
     public void switchToManagementOverviewScreen(){
         primaryStage.setScene(managementOverviewScreenScene);
         primaryStage.setTitle("Management Overview");
+    }
+
+    /**
+     * Adds an expense to the Event Screen
+     * @param expense the expense to be added
+     */
+    public void addExpenseToScreen(Expense expense) {
+        eventScreenCtrl.addOpenExpense(expense);
+    }
+
+    public void editExpenseToScreen(Expense expense) {
+        eventScreenCtrl.addOpenExpense(expense);
     }
 }

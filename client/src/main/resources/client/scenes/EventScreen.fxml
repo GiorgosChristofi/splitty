@@ -47,16 +47,12 @@
       <Button fx:id="addExpense" layoutX="386.0" layoutY="198.0" mnemonicParsing="false" onAction="#addExpense" prefHeight="30.0" prefWidth="148.0" text="Add Expense" />
       <HBox layoutX="160.0" layoutY="318.0" prefHeight="25.0" prefWidth="374.0">
          <children>
-            <Button fx:id="allExpensesButton" mnemonicParsing="false" onAction="#showAllExpensesSettled" prefHeight="25.0" prefWidth="132.0" text="All" />
+            <Button fx:id="allExpensesButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="All" />
             <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="Button" />
             <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Button" />
          </children>
       </HBox>
-      <VBox layoutX="160.0" layoutY="343.0" prefHeight="200.0" prefWidth="374.0">
-         <children>
-            <ListView fx:id="expensesLogListView" prefHeight="200.0" prefWidth="200.0" />
-         </children>
-      </VBox>
+      <VBox fx:id="expensesVBox" layoutX="160.0" layoutY="343.0" prefHeight="200.0" prefWidth="374.0" />
       <Button fx:id="settleDebtsButton" layoutX="399.0" layoutY="554.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="30.0" prefWidth="139.0" text="Settle Debts" />
       <Button fx:id="goBackButton" layoutX="29.0" layoutY="557.0" mnemonicParsing="false" onAction="#switchToMainScreen" prefHeight="25.0" prefWidth="29.0" />
    </children>

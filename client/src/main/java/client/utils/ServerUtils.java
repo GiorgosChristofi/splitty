@@ -171,7 +171,7 @@ public class ServerUtils {
 	 * Sends a DELETE request to delete the specific expense
 	 * @param expenseId the id of the expense we want to delete
 	 */
-	public void deleteExpenseForEvent(String expenseId) {
+	public void deleteExpenseForEvent(long expenseId) {
 		Response response = ClientBuilder.newClient()
 				.target(serverURL)
 				.path("api/expenses/" + expenseId)
@@ -191,13 +191,13 @@ public class ServerUtils {
 	 * @param expense the expense we want the current expense to be updated to
 	 * @return the new expense
 	 */
-	public Expense editExpense(String expenseId, Expense expense) {
+	public Expense editExpense(long expenseId, Expense expense) {
 		return ClientBuilder.newClient()
-				.target(serverURL)
-				.path("api/expenses" + expenseId)
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+			.target(serverURL)
+			.path("api/expenses/" + expenseId)
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 
 	//TODO Test weather or not the methods actually work in cae of problems like(expense doesn't exist)

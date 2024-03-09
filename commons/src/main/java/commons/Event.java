@@ -22,12 +22,7 @@ public class Event{
     private Set<Participant> participants;
     @OneToMany(mappedBy = "event", orphanRemoval = true)
     private Set<Expense> expenses;
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Expense> settledExpenses;
 
-    public List<Expense> getSettledExpenses() {
-        return settledExpenses;
-    }
 
     @SuppressWarnings("unused")
     public Event() {}
@@ -38,7 +33,6 @@ public class Event{
         this.expenses = new HashSet<>();
         this.id = generateId();
         this.creationDate = creationDate;
-        this.settledExpenses = new ArrayList<>();
         this.lastActivity = LocalDateTime.now();
     }
 
@@ -104,6 +98,16 @@ public class Event{
 
     public Set<Expense> getExpenses(){
         return expenses;
+    }
+
+    public Expense getExpenseByIndex(int index) {
+        Iterator<Expense> iterator = expenses.iterator();
+        while(iterator.hasNext()) {
+            Expense current = iterator.next();
+            if(current.getIndex() == index)
+                return current;
+        }
+        return null;
     }
 
     public LocalDateTime getLastActivity(){

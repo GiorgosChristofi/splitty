@@ -10,10 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,6 +51,8 @@ public class EventScreenCtrl implements Initializable{
     private ListView<String> listViewExpensesParticipants;
     @FXML
     private ListView<String> expensesLogListView;
+    @FXML
+    private VBox expensesVBox;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final Translation translation;
@@ -171,6 +175,10 @@ public class EventScreenCtrl implements Initializable{
         //System.out.println(event.toString());
     }
 
+    public void editExpense(Expense expense) {
+        mainCtrl.switchToEditExpense(expense);
+    }
+
     /**
      * set the name of the event in the event screen
      * @param event the current event we are at
@@ -227,22 +235,22 @@ public class EventScreenCtrl implements Initializable{
      * the action when we press the "All" button
      * @param actionEvent on button click event
      */
-    public void showAllExpensesSettled(ActionEvent actionEvent) {
-        expensesLogListView.getItems().clear();
-        List<Expense> settledExpenses = event.getSettledExpenses();
-        for(int i = 0; i < settledExpenses.size(); i++){
-            String log = "";
-            // null check used in-development because Participant functionality isn't there yet!
-            Participant owedTo = settledExpenses.get(i).getOwedTo();
-            if(owedTo==null) log += "null";
-            else log += owedTo.getName();
-            log+= " paid ";
-            log+=settledExpenses.get(i).getPriceInCents();
-            log+= " for ";
-            log+=settledExpenses.get(i).getName();
-            expensesLogListView.getItems().add(log);
-        }
-    }
+//    public void showAllExpensesSettled(ActionEvent actionEvent) {
+//        expensesLogListView.getItems().clear();
+//        List<Expense> settledExpenses = event.getSettledExpenses();
+//        for(int i = 0; i < settledExpenses.size(); i++){
+//            String log = "";
+//            // null check used in-development because Participant functionality isn't there yet!
+//            Participant owedTo = settledExpenses.get(i).getOwedTo();
+//            if(owedTo==null) log += "null";
+//            else log += owedTo.getName();
+//            log+= " paid ";
+//            log+=settledExpenses.get(i).getPriceInCents();
+//            log+= " for ";
+//            log+=settledExpenses.get(i).getName();
+//            expensesLogListView.getItems().add(log);
+//        }
+//    }
 
     /**
      * UI for settling current debts
@@ -259,4 +267,35 @@ public class EventScreenCtrl implements Initializable{
     public void switchToMainScreen(ActionEvent actionEvent) {
         mainCtrl.showMainScreen();
     }
+
+    /**
+     * Adds a clickable label to the Event Screen
+     * @return the label added
+     */
+    public Label addOpenExpense(Expense expense) {
+        //expensesLogListView.getItems().add("new Expense");
+        Label expenseLabel = new Label(expense.eventScreenString());
+        expensesVBox.getChildren().add(expenseLabel);
+        expenseLabel.setOnMouseClicked(
+            mouseEvent -> {
+                expensesVBox.getChildren().remove(expenseLabel);
+                editExpense(expense);
+            }
+        );
+        expenseLabel.setOnMouseEntered(
+            mouseEvent -> {
+                expenseLabel.setUnderline(true);
+                mainCtrl.getEventScene().setCursor(Cursor.HAND);
+            }
+        );
+
+        expenseLabel.setOnMouseExited(
+            mouseEvent -> {
+                expenseLabel.setUnderline(false);
+                mainCtrl.getEventScene().setCursor(Cursor.DEFAULT);
+            }
+        );
+        return expenseLabel;
+    }
+
 }
