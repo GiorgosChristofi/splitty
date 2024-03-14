@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import client.utils.Translation;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import java.util.Locale;
+import java.util.Set;
 
 public class MainCtrl {
 
@@ -33,14 +35,17 @@ public class MainCtrl {
     private Scene managementOvervirewPasswordScene;
     private ManagementOverviewPasswordCtrl managementOverviewPasswordCtrl;
     private Scene managementOverviewScreenScene;
-
+    private ServerUtils serverUtils;
 
     @Inject
     Translation translation;
     @Inject
     @Named("client.language")
     String language;
-
+    @Inject
+    public MainCtrl (ServerUtils serverUtils) {
+        this.serverUtils = serverUtils;
+    }
     public void initialize(Stage primaryStage, Pair<StartupScreenCtrl, Parent> overview,
                            Pair<EventScreenCtrl, Parent> eventUI, Pair<ExpenseScreenCtrl, Parent> expenseUI,
 
@@ -87,11 +92,15 @@ public class MainCtrl {
      */
     public void joinEvent(Event event){
         //TODO implement
+        event = serverUtils.getEvent(event.getId());
+        Set<Expense> expensesForEvent = serverUtils.getExpensesForEvent(event.getId());
         primaryStage.setScene(eventScene);
         eventScreenCtrl.setEvent(event);
         eventScreenCtrl.setParticipants(event);
         eventScreenCtrl.setParticipantsForExpenses(event);
+        eventScreenCtrl.addExpenseToEventScreen(event);
         primaryStage.setTitle("Event Screen");
+        //System.out.println(expensesForEvent);
     }
 
     /**
@@ -161,15 +170,4 @@ public class MainCtrl {
         primaryStage.setTitle("Management Overview");
     }
 
-    /**
-     * Adds an expense to the Event Screen
-     * @param expense the expense to be added
-     */
-    public void addExpenseToScreen(Expense expense) {
-        eventScreenCtrl.addOpenExpense(expense);
-    }
-
-    public void editExpenseToScreen(Expense expense) {
-        eventScreenCtrl.addOpenExpense(expense);
-    }
 }

@@ -222,34 +222,16 @@ public class ExpenseScreenCtrl implements Initializable{
         return new Expense(expenseIndex, name, priceInCents, expenseDate, currentEvent, participant);
     }
 
-    public void addExpenseToServer() {
-        currentExpense = createNewExpense();
-        expenseIndex++;
-        server.addExpense(currentEvent.getId(),
-            currentExpense);
-    }
 
-    public void editExpenseOnServer(int index) {
-        currentExpense = createNewExpense();
-        server.editExpense(currentEvent.getExpenseByIndex(index).getId(),
-            createNewExpense());
-    }
     /**
      * Needs revision
      */
     public void addExpenseToEvenScreen(ActionEvent actionEvent) {
-        //System.out.println(createNewExpense());
-        if(currentExpense == null) {
-            addExpenseToServer();
-            currentExpense.setToEdit(true);
-        }
-        else {
-            editExpenseOnServer(currentExpense.getIndex());
-            currentExpense.setToEdit(true);
-        }
-        mainCtrl.addExpenseToScreen(currentExpense);
+        Expense expense = createNewExpense();
+        server.addExpense(currentEvent.getId(),
+            expense);
+        currentEvent.addExpense(expense);
         mainCtrl.joinEvent(currentEvent);
-        currentExpense = null;
     }
 
     public void setCurrentExpense(Expense expense) {

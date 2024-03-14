@@ -21,7 +21,7 @@ public class Expense{
     private int priceInCents;
     private Date date;
     @ManyToOne()
-    @JsonIgnore
+    //@JsonIgnore
     private Event event;
     @ManyToOne()
     private Participant owedTo;

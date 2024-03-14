@@ -209,7 +209,8 @@ public class EventScreenCtrl implements Initializable{
         Iterator<Participant> participantIterator = participants.iterator();
         while(participantIterator.hasNext()){
             Participant current = participantIterator.next();
-            if(participantIterator.hasNext())participantsText += current.getName() + ", ";
+            if(participantIterator.hasNext())
+                participantsText += current.getName() + ", ";
             else participantsText += current.getName();
         }
         if(participantsText.equals(""))participantsLabel.setText("There are no participants");
@@ -232,27 +233,6 @@ public class EventScreenCtrl implements Initializable{
     }
 
     /**
-     * the action when we press the "All" button
-     * @param actionEvent on button click event
-     */
-//    public void showAllExpensesSettled(ActionEvent actionEvent) {
-//        expensesLogListView.getItems().clear();
-//        List<Expense> settledExpenses = event.getSettledExpenses();
-//        for(int i = 0; i < settledExpenses.size(); i++){
-//            String log = "";
-//            // null check used in-development because Participant functionality isn't there yet!
-//            Participant owedTo = settledExpenses.get(i).getOwedTo();
-//            if(owedTo==null) log += "null";
-//            else log += owedTo.getName();
-//            log+= " paid ";
-//            log+=settledExpenses.get(i).getPriceInCents();
-//            log+= " for ";
-//            log+=settledExpenses.get(i).getName();
-//            expensesLogListView.getItems().add(log);
-//        }
-//    }
-
-    /**
      * UI for settling current debts
      * @param actionEvent on button click event
      */
@@ -268,34 +248,15 @@ public class EventScreenCtrl implements Initializable{
         mainCtrl.showMainScreen();
     }
 
-    /**
-     * Adds a clickable label to the Event Screen
-     * @return the label added
-     */
-    public Label addOpenExpense(Expense expense) {
-        //expensesLogListView.getItems().add("new Expense");
-        Label expenseLabel = new Label(expense.eventScreenString());
-        expensesVBox.getChildren().add(expenseLabel);
-        expenseLabel.setOnMouseClicked(
-            mouseEvent -> {
-                expensesVBox.getChildren().remove(expenseLabel);
-                editExpense(expense);
-            }
-        );
-        expenseLabel.setOnMouseEntered(
-            mouseEvent -> {
-                expenseLabel.setUnderline(true);
-                mainCtrl.getEventScene().setCursor(Cursor.HAND);
-            }
-        );
 
-        expenseLabel.setOnMouseExited(
-            mouseEvent -> {
-                expenseLabel.setUnderline(false);
-                mainCtrl.getEventScene().setCursor(Cursor.DEFAULT);
-            }
-        );
-        return expenseLabel;
+    public void addExpenseToEventScreen(Event event) {
+        this.event = event;
+        //expensesLogListView.getItems().clear();
+        Set<Expense> eventExpenses = event.getExpenses();
+        Iterator<Expense> iterator = eventExpenses.iterator();
+        while(iterator.hasNext())
+            expensesLogListView.getItems().add(iterator.next().eventScreenString());
+        System.out.println(event);
     }
 
 }
