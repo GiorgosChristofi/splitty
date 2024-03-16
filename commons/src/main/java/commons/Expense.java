@@ -20,10 +20,13 @@ public class Expense{
     private int priceInCents;
     private Date date;
 
+<<<<<<< HEAD
     @ManyToOne()
     //@JsonIgnore
     private Event event;
 
+=======
+>>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {"expensesOwedTo"})
     private Participant owedTo;

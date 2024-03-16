@@ -35,12 +35,26 @@ public class MainCtrl {
     private Scene managementOvervirewPasswordScene;
     private ManagementOverviewPasswordCtrl managementOverviewPasswordCtrl;
     private Scene managementOverviewScreenScene;
+<<<<<<< HEAD
+=======
+
+>>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
     private final Translation translation;
     @Inject
     @Named("client.language")
     private String language;
     private final ServerUtils server;
     private String eventCode;
+<<<<<<< HEAD
+=======
+
+    @Inject
+    public MainCtrl(Translation translation, ServerUtils server) {
+        this.translation = translation;
+        this.server = server;
+        this.eventCode = null;
+    }
+>>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
 
 
     @Inject
@@ -92,6 +106,7 @@ public class MainCtrl {
      * When called the view changes to the event specified as input.
      * join an event (either used when creating or joining one) and updating the fields in the event screen
      */
+<<<<<<< HEAD
 
 //    public void joinEvent(Event event) {
 //        //TODO implement
@@ -103,6 +118,8 @@ public class MainCtrl {
 //        eventScreenCtrl.setParticipantsForExpenses(event);
 //        eventScreenCtrl.addExpenseToEventScreen(event);
 //    }
+=======
+>>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
     public void switchToEventScreen(){
         Event event = server.getEvent(eventCode);
         eventScreenCtrl.refresh(event);
