@@ -1,6 +1,5 @@
 package server.api;
 import commons.Expense;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +43,10 @@ public class ExpenseController {
     }
 
     /**
+<<<<<<< HEAD
      *
+=======
+>>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
      * Deletes an expense from an event
      * @param id the id of the expense
      * @param eventId the id of the event to delete the expense from

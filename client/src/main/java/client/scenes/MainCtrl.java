@@ -35,24 +35,18 @@ public class MainCtrl {
     private Scene managementOvervirewPasswordScene;
     private ManagementOverviewPasswordCtrl managementOverviewPasswordCtrl;
     private Scene managementOverviewScreenScene;
-    private ServerUtils serverUtils;
-
-    @Inject
-    Translation translation;
+    private final Translation translation;
     @Inject
     @Named("client.language")
-    String language;
-    @Inject
-    public MainCtrl (ServerUtils serverUtils) {
-        this.serverUtils = serverUtils;
-    }
-
+    private String language;
+    private final ServerUtils server;
     private String eventCode;
+
 
     @Inject
     public MainCtrl(Translation translation, ServerUtils server) {
         this.translation = translation;
-        this.serverUtils = server;
+        this.server = server;
         this.eventCode = null;
     }
     public void initialize(Stage primaryStage, Pair<StartupScreenCtrl, Parent> overview,
@@ -98,6 +92,7 @@ public class MainCtrl {
      * When called the view changes to the event specified as input.
      * join an event (either used when creating or joining one) and updating the fields in the event screen
      */
+
 //    public void joinEvent(Event event) {
 //        //TODO implement
 //        event = serverUtils.getEvent(event.getId());
@@ -109,7 +104,7 @@ public class MainCtrl {
 //        eventScreenCtrl.addExpenseToEventScreen(event);
 //    }
     public void switchToEventScreen(){
-        Event event = serverUtils.getEvent(eventCode);
+        Event event = server.getEvent(eventCode);
         eventScreenCtrl.refresh(event);
         primaryStage.setScene(eventScene);
         primaryStage.setTitle("Event Screen");
@@ -135,17 +130,17 @@ public class MainCtrl {
     public Scene getEventScene() {
         return eventScene;
     }
+    public void switchToAddExpense() {
+        Event event = server.getEvent(eventCode);
+        expenseScreenCtrl.resetAll();
+        expenseScreenCtrl.refresh(event);
+        primaryStage.setScene(expenseScene);
+    }
 
     public Scene getExpenseScene() {
         return expenseScene;
     }
 
-    public void switchToAddExpense() {
-        Event event = serverUtils.getEvent(eventCode);
-        expenseScreenCtrl.resetAll();
-        expenseScreenCtrl.refresh(event);
-        primaryStage.setScene(expenseScene);
-    }
 //    public void switchToEditExpense(Expense expense) {
 //        expenseScreenCtrl.setEvent(eventScreenCtrl.getEvent());
 //        expenseScreenCtrl.setCurrentExpense(expense);
@@ -153,13 +148,13 @@ public class MainCtrl {
 //    }
 
     public void openEditTitle() {
-        Event event = serverUtils.getEvent(eventCode);
+        Event event = server.getEvent(eventCode);
         editTitleCtrl.refresh(event);
         primaryStage.setScene(editTitleScene);
     }
 
     public void switchToAddParticipant() {
-        Event event = serverUtils.getEvent(eventCode);
+        Event event = server.getEvent(eventCode);
         participantScreenCtrl.refresh(event);
         primaryStage.setScene(participantScene);
     }
