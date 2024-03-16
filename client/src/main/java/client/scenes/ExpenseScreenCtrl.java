@@ -68,6 +68,7 @@ public class ExpenseScreenCtrl implements Initializable{
     private Set<Participant> participants;
     private Expense currentExpense;
     private int expenseIndex;
+
     @Inject
     public ExpenseScreenCtrl (ServerUtils server, MainCtrl mainCtrl,
                               Translation translation) {
@@ -83,14 +84,16 @@ public class ExpenseScreenCtrl implements Initializable{
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currency.setItems(FXCollections.observableArrayList("", "EUR"));
-        choosePayer.setItems(gettingTheParticipants());
+        currency.setItems(FXCollections.observableArrayList("EUR"));
+        choosePayer.setItems(getParticipantList());
         binds();
     }
 
-    public ObservableList<String> gettingTheParticipants() {
-        if(participants == null)
+    public ObservableList<String> getParticipantList() {
+        Set<Participant> participants;
+        if(currentEvent == null|| currentEvent.getParticipants() == null)
             participants = new HashSet<>();
+        else participants = currentEvent.getParticipants();
         Iterator<Participant> iterator = participants.iterator();
         List<String> names = new ArrayList<>();
         while(iterator.hasNext()) {
@@ -100,7 +103,7 @@ public class ExpenseScreenCtrl implements Initializable{
         return FXCollections.observableArrayList(names);
     }
 
-    public void binds() {
+    private void binds() {
         addEditExpense.textProperty()
             .bind(translation.getStringBinding("Expense.Label.Display.Add"));
         paidBy.textProperty()
@@ -135,9 +138,10 @@ public class ExpenseScreenCtrl implements Initializable{
      * Assign the event corresponding to the current expense
      * @param event the event
      */
-    public void setEvent(Event event) {
+    public void refresh(Event event) {
         this.currentEvent = event;
-        this.participants = currentEvent.getParticipants();
+        currency.setItems(FXCollections.observableArrayList("", "EUR"));
+        choosePayer.setItems(getParticipantList());
     }
 
     /**
@@ -146,11 +150,7 @@ public class ExpenseScreenCtrl implements Initializable{
      * @param actionEvent the action of clicking the button
      */
     public void switchToEventScreen(ActionEvent actionEvent) {
-        resetAmount();
-        resetPurpose();
-        resetDate();
-        resetCurrency();
-        mainCtrl.joinEvent(currentEvent);
+        mainCtrl.switchToEventScreen();
     }
 
     /**
@@ -195,9 +195,8 @@ public class ExpenseScreenCtrl implements Initializable{
      * Creates a new expense based on the information provided
      * and adds it to the backend
      * in the ExpenseScreen
-     * @return the created expense
      */
-    public Expense createNewExpense() {
+    public void createNewExpense() {
         String name = expensePurpose.getText();
         String priceInMoney = sum.getText();
         double price = 0;
@@ -217,9 +216,11 @@ public class ExpenseScreenCtrl implements Initializable{
         /*Participant participant =
             new Participant(choosePayer.getValue(), currentEvent);*/
         // I'd suggest doing something with currentEvent.getParticipants()
-        Participant participant = null;
-        System.out.println(currentEvent.getId());
-        return new Expense(name, priceInCents, expenseDate, currentEvent, participant);
+        Iterator<Participant> participantIterator = currentEvent.getParticipants().iterator();
+        Participant participant = participantIterator.hasNext()
+                ? participantIterator.next() : null;
+        server.addExpense(currentEvent.getId(),
+            new Expense(name, priceInCents, expenseDate, participant));
     }
 
 
@@ -227,11 +228,8 @@ public class ExpenseScreenCtrl implements Initializable{
      * Needs revision
      */
     public void addExpenseToEvenScreen(ActionEvent actionEvent) {
-        Expense expense = createNewExpense();
-        server.addExpense(currentEvent.getId(),
-            expense);
-        currentEvent.addExpense(expense);
-        mainCtrl.joinEvent(currentEvent);
+        createNewExpense();
+        mainCtrl.switchToEventScreen();
     }
 
     public void setCurrentExpense(Expense expense) {

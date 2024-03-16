@@ -43,8 +43,6 @@ public class ParticipantScreenCtrl {
 
     private Event event;
 
-    private Participant participant;
-
 
     @Inject
     public ParticipantScreenCtrl(ServerUtils server, MainCtrl mainCtrl, Translation translation) {
@@ -69,12 +67,11 @@ public class ParticipantScreenCtrl {
     public void confirmEdit(ActionEvent actionEvent) {
         Participant participant = addParticipant();
         server.addParticipant(event.getId(), participant.getName());
-        event.addParticipant(participant);
-        mainCtrl.joinEvent(event);
+        mainCtrl.switchToEventScreen();
     }
 
     public void cancel(ActionEvent actionEvent) {
-        mainCtrl.joinEvent(event);
+        mainCtrl.switchToEventScreen();
     }
 
     public Participant addParticipant(){
@@ -82,7 +79,7 @@ public class ParticipantScreenCtrl {
         String email = emailField.getText();
         String iban = ibanField.getText();
         try {
-            int bic = Integer.parseInt(String.valueOf(bicField));
+            int bic = Integer.parseInt(String.valueOf(bicField.getText()));
         }
         catch (IllegalArgumentException e) {
             System.out.println(":<");
@@ -92,7 +89,7 @@ public class ParticipantScreenCtrl {
         return participant;
     }
 
-    public void editParticipant(Participant participant){
+    public void editParticipant(){
         String name = nameField.getText();
         String email = emailField.getText();
         String iban = ibanField.getText();
@@ -102,22 +99,11 @@ public class ParticipantScreenCtrl {
         catch (IllegalArgumentException e) {
             System.out.println(":<");
         }
-        participant.setName(name);
+
+        //TODO: Editing participants
     }
 
-    public void setEvent (Event event){
+    public void refresh(Event event){
         this.event = event;
-    }
-
-    public void setParticipant(Participant participant){
-        this.participant = participant;
-    }
-
-    public Event getEvent() {
-        return this.event;
-    }
-
-    public Participant getParticipant() {
-        return this.participant;
     }
 }

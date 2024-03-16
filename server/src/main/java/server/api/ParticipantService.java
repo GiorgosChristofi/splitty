@@ -28,6 +28,7 @@ public class ParticipantService {
     /**
      * remove a participant, make sure both the event and participants exist or else
      * throw an exception
+     * @param eventId the id of the event of the participant
      * @param participantId the participant we want to remove
      */
     public void removeParticipant(String eventId, Long participantId) {

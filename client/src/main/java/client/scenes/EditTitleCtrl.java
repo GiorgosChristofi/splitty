@@ -43,19 +43,18 @@ public class EditTitleCtrl implements Initializable {
         this.confirm.textProperty().bind(translation.getStringBinding("editTitle.confirmButton"));
     }
 
-    public void setEvent(Event event) {
+    public void refresh(Event event) {
         this.event = event;
     }
 
     public void confirm() {
-        Event newEvent = server.editTitle(event.getId(), title.getText());
-        event.setTitle(newEvent.getTitle());
+        server.editTitle(event.getId(), title.getText());
         title.clear();
-        mainCtrl.joinEvent(event);
+        mainCtrl.switchToEventScreen();
     }
 
     public void cancel() {
         title.clear();
-        mainCtrl.joinEvent(event);
+        mainCtrl.switchToEventScreen();
     }
 }

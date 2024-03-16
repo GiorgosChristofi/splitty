@@ -4,7 +4,6 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,19 +12,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import server.database.EventRepository;
-import server.database.ParticipantRepository;
 
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -162,6 +156,7 @@ public class EventControllerTest {
         assert event2 != null;
         assert event1 != null;
         List<Event> list = List.of(event3, event2, event1);
+        //TODO: Make these tests deterministic!
         assertEquals(list, response.getBody());
     }
 
@@ -182,6 +177,7 @@ public class EventControllerTest {
         event1.addParticipant(new Participant());
         ResponseEntity<List<Event>> response = controller.orderByLastActivity();
         List<Event> list = List.of(event1, event3, event2);
+        //TODO: Make these tests deterministic!
         assertEquals(list, response.getBody());
     }
 

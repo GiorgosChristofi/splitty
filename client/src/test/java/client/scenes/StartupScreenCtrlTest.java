@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -126,10 +127,13 @@ public class StartupScreenCtrlTest{
 
     private class TestMainController extends MainCtrl{
         public List<String> calls = new LinkedList<>();
-        public Event lastEvent;
+
+        public TestMainController() {
+            super(null, null);
+        }
+
         @Override
-        public void joinEvent(Event event){
-            lastEvent = event;
+        public void switchEvents(String eventCode){
             calls.add("join");
         }
     }

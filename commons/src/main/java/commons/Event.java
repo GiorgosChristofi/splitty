@@ -34,6 +34,12 @@ public class Event{
      * @return A List of settled Expenses
      */
     /***
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = {"event"})
+    private Set<Expense> expenses;
+
+
+    /**
      * Constructor for object mappers
      */
     @SuppressWarnings("unused")

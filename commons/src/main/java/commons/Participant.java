@@ -2,6 +2,7 @@ package commons;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -16,7 +17,8 @@ public class Participant {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    @OneToMany(mappedBy = "owedTo", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owedTo", orphanRemoval = true)
+    @JsonIgnoreProperties(value = {"owedTo"})
     private Set<Expense> expensesOwedTo;
 
     @SuppressWarnings("unused")

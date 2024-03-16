@@ -10,9 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -29,7 +27,7 @@ class ExpenseControllerTest {
     public void addExpenseToEventTest() {
         String eventId = "sampleEventId";
         Expense expense = new Expense("Sample Expense",
-            100, null, null, null);
+            100, null, null);
         doNothing().when(expenseService).addExpense(anyString(), any(Expense.class));
         ResponseEntity<Void> responseEntity
             = expenseController.addExpenseToEvent(eventId, expense);
@@ -40,21 +38,18 @@ class ExpenseControllerTest {
     @Test
     public void getAllExpensesForEventTest() {
         String eventId = "sampleEventId";
-        List<Expense> mockExpenses = Arrays.asList(
+        Set<Expense> mockExpenses = Set.of(
             new Expense("Expense 1", 100,
-                null, null, null),
+                null, null),
             new Expense("Expense 2", 200,
-                null, null, null)
+                null, null)
         );
         when(expenseService.getAllExpenses(eventId)).thenReturn(mockExpenses);
-        ResponseEntity<List<Expense>> responseEntity
+        ResponseEntity<Set<Expense>> responseEntity
             = expenseController.getAllExpensesForEvent(eventId);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        List<Expense> returnedExpenses = responseEntity.getBody();
-        assertNotNull(returnedExpenses);
-        assertEquals(mockExpenses.size(), returnedExpenses.size());
-        for (int i = 0; i < mockExpenses.size(); i++)
-            assertEquals(mockExpenses.get(i), returnedExpenses.get(i));
+        Set<Expense> returnedExpenses = responseEntity.getBody();
+        assertEquals(mockExpenses, returnedExpenses);
     }
 
     @Test
@@ -69,8 +64,7 @@ class ExpenseControllerTest {
     public void editNonExistingExpenseTest() {
         Expense expected = new Expense();
         when(expenseService.editExpense(anyLong(), any())).thenThrow(new EntityNotFoundException("test"));
-        ResponseEntity<Expense> response = expenseController.editExpense(1L, expected);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertThrows(EntityNotFoundException.class, () -> expenseController.editExpense(1L, expected));
     }
 
     //Need to add tests for the delete method

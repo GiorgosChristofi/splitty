@@ -10,9 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -35,37 +34,19 @@ class ExpenseServiceTest {
     @Test
     public void getAllExpensesForEventTest() {
         String eventId = "mockEventId";
-        List<Expense> expectedExpenses = new ArrayList<>();
-        expectedExpenses.add(new Expense("Expense 1", 100,
-            null, null, null));
-        expectedExpenses.add(new Expense("Expense 2", 200,
-            null, null, null));
-        when(mockExpenseRepository.findByEventId(anyString()))
-            .thenReturn(expectedExpenses);
-        List<Expense> actualExpenses =
+        Expense expense1 = new Expense("Expense 1", 100,
+                null, null);
+        Expense expense2 = new Expense("Expense 2", 200,
+                null, null);
+        Set<Expense> expectedExpenses = Set.of(expense1, expense2);
+        Event fakeEvent = new Event("title", null);
+        fakeEvent.addExpense(expense1);
+        fakeEvent.addExpense(expense2);
+        when(mockEventRepository.findById(anyString()))
+            .thenReturn(Optional.of(fakeEvent));
+        Set<Expense> actualExpenses =
             mockExpenseService.getAllExpenses(eventId);
         assertEquals(expectedExpenses, actualExpenses);
-    }
-
-    /**
-     * Tests the getExpensesForEvents
-     */
-    @Test
-    public void calculateTotalExpensesForEventTest() {
-        String eventId = "mockEventId";
-        List<Expense> expectedExpenses = new ArrayList<>();
-        expectedExpenses.add(new Expense("Expense 1", 100,
-            null, null, null));
-        expectedExpenses.add(new Expense("Expense 2", 200,
-            null, null, null));
-        when(mockExpenseRepository.findByEventId(anyString()))
-            .thenReturn(expectedExpenses);
-        List<Expense> actualExpenses = mockExpenseService
-            .getAllExpenses(eventId);
-        int sum = 0;
-        for (Expense actualExpense : actualExpenses)
-            sum += actualExpense.getPriceInCents();
-        assertEquals(sum, 300);
     }
 
     /**
@@ -75,11 +56,13 @@ class ExpenseServiceTest {
     public void deleteExpenseTest() {
         Event mockEvent = new Event("Sample Event", null);
         Expense mockExpense = new Expense("mockExpense", 100,
-            null, mockEvent, null);
+            null, null);
         mockEvent.addExpense(mockExpense);
+        when(mockEventRepository.findById(anyString()))
+                .thenReturn(Optional.of(mockEvent));
         when(mockExpenseRepository.findById(anyLong()))
             .thenReturn(Optional.of(mockExpense));
-        mockExpenseService.deleteExpense(mockExpense.getId());
+        mockExpenseService.deleteExpense(mockEvent.getId(), mockExpense.getId());
         assertFalse(mockEvent.getExpenses().contains(mockExpense));
     }
 }

@@ -130,12 +130,11 @@ public class ServerUtils {
 	 * Sends a POST request to add an expense to a specific event
 	 * @param eventId the id of the specific event
 	 * @param expense the expense to be added
-	 * @return the expense that was added
 	 */
-	public Expense addExpense(String eventId, Expense expense) {
-		return ClientBuilder.newClient()
+	public void addExpense(String eventId, Expense expense) {
+		ClientBuilder.newClient()
 				.target(serverURL)
-				.path("api/expenses/" + eventId + "/expenses")
+				.path("api/events/" + eventId + "/expenses")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
@@ -148,7 +147,7 @@ public class ServerUtils {
 	 */
 	public Set<Expense> getExpensesForEvent(String eventId) {
 		return ClientBuilder.newClient()
-				.target(serverURL).path("api/expenses/" + eventId + "/expenses")
+				.target(serverURL).path("api/events/" + eventId + "/expenses")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Set<Expense>>() {});
@@ -162,7 +161,7 @@ public class ServerUtils {
 	 */
 	public double getTotalExpensesForEvent(String eventId) {
 		return ClientBuilder.newClient()
-				.target(serverURL).path("api/expenses/" + eventId + "/total-expenses")
+				.target(serverURL).path("api/events/" + eventId + "/total-expenses")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(Double.class);
@@ -170,12 +169,13 @@ public class ServerUtils {
 
 	/**
 	 * Sends a DELETE request to delete the specific expense
+	 * @param eventId the id of the event to delete the Expense from
 	 * @param expenseId the id of the expense we want to delete
 	 */
-	public void deleteExpenseForEvent(long expenseId) {
+	public void deleteExpenseForEvent(String eventId, String expenseId) {
 		Response response = ClientBuilder.newClient()
 				.target(serverURL)
-				.path("api/expenses/" + expenseId)
+				.path("api/events/" + eventId + "/expenses/" + expenseId)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
@@ -188,17 +188,17 @@ public class ServerUtils {
 
 	/**
 	 * Sends a PUT request to modify an existing expense
-	 * @param expenseId the id of the expense we want to change
+	 * @param eventId the id of the Event tied to the expense
 	 * @param expense the expense we want the current expense to be updated to
 	 * @return the new expense
 	 */
-	public Expense editExpense(long expenseId, Expense expense) {
+	public Expense editExpense(String eventId, Expense expense) {
 		return ClientBuilder.newClient()
-			.target(serverURL)
-			.path("api/expenses/" + expenseId)
-			.request(APPLICATION_JSON)
-			.accept(APPLICATION_JSON)
-			.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+				.target(serverURL)
+				.path("api/events/" + eventId + "/expenses/" + expense.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 
 	//TODO Test weather or not the methods actually work in cae of problems like(expense doesn't exist)

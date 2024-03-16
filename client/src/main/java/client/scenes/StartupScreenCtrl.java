@@ -92,7 +92,6 @@ public class StartupScreenCtrl implements Initializable {
             return;
         }
         Event event = server.createEvent(title);
-        System.out.println(event);
         joinEvent(event);
     }
 
@@ -118,7 +117,8 @@ public class StartupScreenCtrl implements Initializable {
      * @param event the event to join
      */
     public void joinEvent(Event event){
-        mainCtrl.joinEvent(event);
+        mainCtrl.switchEvents(event.getId());
+        mainCtrl.switchToEventScreen();
         addToHistory(event);
     }
 

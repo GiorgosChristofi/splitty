@@ -2,7 +2,6 @@ package server.api;
 import commons.Event;
 import commons.Participant;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
@@ -46,7 +45,6 @@ public class EventService {
      * @param newTitle the new title
      * @return the new title of the event is saved in the database
      */
-    @Transactional
     public Event editTitle (String eventId, String newTitle){
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event not found"));

@@ -46,6 +46,15 @@ public class MainCtrl {
     public MainCtrl (ServerUtils serverUtils) {
         this.serverUtils = serverUtils;
     }
+
+    private String eventCode;
+
+    @Inject
+    public MainCtrl(Translation translation, ServerUtils server) {
+        this.translation = translation;
+        this.serverUtils = server;
+        this.eventCode = null;
+    }
     public void initialize(Stage primaryStage, Pair<StartupScreenCtrl, Parent> overview,
                            Pair<EventScreenCtrl, Parent> eventUI, Pair<ExpenseScreenCtrl, Parent> expenseUI,
 
@@ -88,17 +97,21 @@ public class MainCtrl {
     /**
      * When called the view changes to the event specified as input.
      * join an event (either used when creating or joining one) and updating the fields in the event screen
-     * @param event the event to join
      */
-    public void joinEvent(Event event){
-        //TODO implement
-        event = serverUtils.getEvent(event.getId());
-        Set<Expense> expensesForEvent = serverUtils.getExpensesForEvent(event.getId());
+//    public void joinEvent(Event event) {
+//        //TODO implement
+//        event = serverUtils.getEvent(event.getId());
+//        Set<Expense> expensesForEvent = serverUtils.getExpensesForEvent(event.getId());
+//        primaryStage.setScene(eventScene);
+//        eventScreenCtrl.setEvent(event);
+//        eventScreenCtrl.setParticipants(event);
+//        eventScreenCtrl.setParticipantsForExpenses(event);
+//        eventScreenCtrl.addExpenseToEventScreen(event);
+//    }
+    public void switchToEventScreen(){
+        Event event = serverUtils.getEvent(eventCode);
+        eventScreenCtrl.refresh(event);
         primaryStage.setScene(eventScene);
-        eventScreenCtrl.setEvent(event);
-        eventScreenCtrl.setParticipants(event);
-        eventScreenCtrl.setParticipantsForExpenses(event);
-        eventScreenCtrl.addExpenseToEventScreen(event);
         primaryStage.setTitle("Event Screen");
         //System.out.println(expensesForEvent);
     }
@@ -128,30 +141,31 @@ public class MainCtrl {
     }
 
     public void switchToAddExpense() {
+        Event event = serverUtils.getEvent(eventCode);
         expenseScreenCtrl.resetAll();
-        expenseScreenCtrl.setEvent(eventScreenCtrl.getEvent());
+        expenseScreenCtrl.refresh(event);
         primaryStage.setScene(expenseScene);
     }
-    public void switchToEditExpense(Expense expense) {
-        expenseScreenCtrl.setEvent(eventScreenCtrl.getEvent());
-        expenseScreenCtrl.setCurrentExpense(expense);
-        primaryStage.setScene(expenseScene);
-    }
+//    public void switchToEditExpense(Expense expense) {
+//        expenseScreenCtrl.setEvent(eventScreenCtrl.getEvent());
+//        expenseScreenCtrl.setCurrentExpense(expense);
+//        primaryStage.setScene(expenseScene);
+//    }
 
     public void openEditTitle() {
-        editTitleCtrl.setEvent(eventScreenCtrl.getEvent());
+        Event event = serverUtils.getEvent(eventCode);
+        editTitleCtrl.refresh(event);
         primaryStage.setScene(editTitleScene);
     }
 
-    public void switchToAddParticipant(Event event) {
-        participantScreenCtrl.setEvent(event);
+    public void switchToAddParticipant() {
+        Event event = serverUtils.getEvent(eventCode);
+        participantScreenCtrl.refresh(event);
         primaryStage.setScene(participantScene);
     }
 
     public void switchToAddParticipantExistent() {
-        participantScreenCtrl.setEvent(participantScreenCtrl.getEvent());
-        participantScreenCtrl.setParticipant(participantScreenCtrl.getParticipant());
-        primaryStage.setScene(participantScene);
+        //TODO: Implement editing participants
     }
 
     /**
@@ -170,4 +184,7 @@ public class MainCtrl {
         primaryStage.setTitle("Management Overview");
     }
 
+    public void switchEvents(String eventCode) {
+        this.eventCode = eventCode;
+    }
 }
