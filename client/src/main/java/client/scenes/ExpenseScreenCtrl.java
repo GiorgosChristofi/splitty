@@ -219,7 +219,7 @@ public class ExpenseScreenCtrl implements Initializable{
         // I'd suggest doing something with currentEvent.getParticipants()
         Participant participant = null;
         System.out.println(currentEvent.getId());
-        return new Expense(expenseIndex, name, priceInCents, expenseDate, currentEvent, participant);
+        return new Expense(name, priceInCents, expenseDate, currentEvent, participant);
     }
 
 

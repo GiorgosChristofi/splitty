@@ -25,7 +25,7 @@ public class ExpenseController {
      */
     @PostMapping("/{eventId}/expenses")
     public ResponseEntity<Void> addExpenseToEvent(@PathVariable String eventId, @RequestBody
-    Expense expense) {
+        Expense expense) {
         expenseService.addExpense(eventId, expense);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -44,18 +44,6 @@ public class ExpenseController {
     }
 
     /**
-     * The method is responsible for creating a GET request
-     * that returns the desired information
-     * @param eventId identifies the even by the specific ID
-     * @return the sum of all the expenses for a specific event
-     */
-    @GetMapping("/{eventId}/total-expenses")
-    public ResponseEntity<Integer> calculateTotalExpensesForEvent(@PathVariable String eventId) {
-        int totalExpenses = expenseService.calculateTotalExpenses(eventId);
-        return ResponseEntity.ok(totalExpenses);
-    }
-
-    /**
      *
      * @param id the id of the expense
      * @return a status indicating whether the even was deleted
@@ -67,7 +55,8 @@ public class ExpenseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Expense> editExpense(@PathVariable long id, @RequestBody Expense expense) {
+    public ResponseEntity<Expense> editExpense(@PathVariable long id,
+                                               @RequestBody Expense expense) {
         try{
             Expense updatedExpense = expenseService.editExpense(id, expense);
             return ResponseEntity.ok(updatedExpense);

@@ -2,7 +2,6 @@ package server.api;
 
 import commons.Event;
 import commons.Expense;
-import commons.Participant;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
@@ -52,21 +51,8 @@ public class ExpenseService {
     }
 
     /**
-     * The method calculates the total amount of money for a specific
-     * event
-     * @param eventId the id by which we find the event
-     * @return the total of all the expenses of the specific event
-     * in cents
-     */
-    public int calculateTotalExpenses(String eventId) {
-        List<Expense> expenses = getAllExpenses(eventId);
-        return expenses.stream().mapToInt(Expense::getPriceInCents).sum();
-    }
-
-    /**
      * !!!NEEDS FURTHER INSPECTION
      * @param id the id of the expense to be deleted
-     * @return true if the expense was deleted, false otherwise
      */
     public void deleteExpense(long id) {
         Expense expense = expenseRepository.findById(id).

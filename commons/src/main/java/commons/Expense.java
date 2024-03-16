@@ -30,8 +30,8 @@ public class Expense{
     @SuppressWarnings("unused")
     public Expense() {}
 
-    public Expense(int index, String name, int priceInCents, Date date, Event event, Participant owedTo) {
-        this.index = index;
+    public Expense(String name, int priceInCents, Date date, Event event, Participant owedTo) {
+        //this.index = index;
         this.name = name;
         this.priceInCents = priceInCents;
         this.date = date;
