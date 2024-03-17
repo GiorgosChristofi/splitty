@@ -17,6 +17,9 @@ public class Participant {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
+    private String email;
+    private String iban;
+    private int bic;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owedTo", orphanRemoval = true)
     @JsonIgnoreProperties(value = {"owedTo"})
     private Set<Expense> expensesOwedTo;
@@ -48,6 +51,15 @@ public class Participant {
         this.name = name;
     }
 
+    public void setEmail(String email){
+        this.email = email;
+    }
+    public void setIban(String iban){
+        this.iban = iban;
+    }
+    public void setBic(int bic){
+        this.bic = bic;
+    }
     public String getName() {
         return name;
     }

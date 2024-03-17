@@ -78,33 +78,39 @@ public class ParticipantScreenCtrl implements Initializable {
 
     public Participant addParticipant(){
         String name = nameField.getText();
+        Participant participant = new Participant(name);
         String email = emailField.getText();
         String iban = ibanField.getText();
         try {
             int bic = Integer.parseInt(String.valueOf(bicField.getText()));
+            participant.setBic(bic);
         }
         catch (IllegalArgumentException e) {
             System.out.println(":<");
         }
-        Participant participant = new Participant(name);
-        //remember email iban bic when available
+        participant.setEmail(email);
+        participant.setIban(iban);
         clearFields();
         return participant;
     }
 
-    public void editParticipant(){
+    public void editParticipant(Participant participant){
         String name = nameField.getText();
+        participant.setName(name);
         String email = emailField.getText();
         String iban = ibanField.getText();
         try {
-            int bic = Integer.parseInt(String.valueOf(bicField));
+            int bic = Integer.parseInt(String.valueOf(bicField.getText()));
+            participant.setBic(bic);
         }
         catch (IllegalArgumentException e) {
             System.out.println(":<");
         }
+        participant.setEmail(email);
+        participant.setIban(iban);
+        }
 
         //TODO: Editing participants
-    }
 
     public void clearFields (){
         nameField.clear();
