@@ -43,6 +43,17 @@ public class ParticipantTest {
         p.removeExpense(ex);
         assertTrue(p.getExpensesOwedTo().isEmpty());
     }
+
+    @Test
+    public void otherFieldsTest(){
+        Participant p = new Participant("participant");
+        p.setBic(1234);
+        p.setIban("NL12");
+        p.setEmail("oo@pp.com");
+        assertEquals(1234, p.getBic());
+        assertEquals("NL12", p.getiban());
+        assertEquals("oo@pp.com", p.getEmail());
+    }
     /**
      * Equality checker for equal expenses
      */

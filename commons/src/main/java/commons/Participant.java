@@ -60,6 +60,15 @@ public class Participant {
     public void setBic(int bic){
         this.bic = bic;
     }
+    public String getEmail(){
+        return this.email;
+    }
+    public String getiban(){
+        return this.iban;
+    }
+    public int getBic(){
+        return this.bic;
+    }
     public String getName() {
         return name;
     }
