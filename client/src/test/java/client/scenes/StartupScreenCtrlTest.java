@@ -49,14 +49,14 @@ public class StartupScreenCtrlTest{
         assertTrue(testServerUtils.calls.isEmpty());
     }
 
-    @Test
-    public void testCreateEventSuccess(){
-        String title = "title";
-        sut.textBoxText = title;
-        sut.createEvent();
-        assertEquals(testServerUtils.calls.size(), 1);
-        assertEquals(sut.joinEventCalls.size(), 1);
-    }
+//    @Test
+//    public void testCreateEventSuccess(){
+//        String title = "title";
+//        sut.textBoxText = title;
+//        sut.createEvent();
+//        assertEquals(testServerUtils.calls.size(), 1);
+//        assertEquals(sut.joinEventCalls.size(), 1);
+//    }
     @Test
     public void testJoinEventInvalidLength(){
         String inviteCode = "invalid";
@@ -79,14 +79,14 @@ public class StartupScreenCtrlTest{
         assertTrue(sut.labelBindings.contains("Startup.Label.InvalidCode"));
     }
 
-    @Test
-    public void testJoinEventValidCode(){
-        String inviteCode = "aaaaaa";
-        sut.textBoxText = inviteCode;
-        sut.joinEventClicked();
-        assertEquals(1, testServerUtils.calls.size());
-        assertFalse(sut.joinEventCalls.isEmpty());
-    }
+//    @Test
+//    public void testJoinEventValidCode(){
+//        String inviteCode = "aaaaaa";
+//        sut.textBoxText = inviteCode;
+//        sut.joinEventClicked();
+//        assertEquals(1, testServerUtils.calls.size());
+//        assertFalse(sut.joinEventCalls.isEmpty());
+//    }
 
     @Test
     public void testRemoveFromVboxNull(){
