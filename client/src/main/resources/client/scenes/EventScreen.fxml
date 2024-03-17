@@ -47,7 +47,7 @@
       <Button fx:id="addExpense" layoutX="386.0" layoutY="198.0" mnemonicParsing="false" onAction="#addExpense" prefHeight="30.0" prefWidth="148.0" text="Add Expense" />
       <HBox layoutX="160.0" layoutY="318.0" prefHeight="25.0" prefWidth="374.0">
          <children>
-            <Button fx:id="allExpensesButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="All" />
+            <Button fx:id="allExpensesButton" mnemonicParsing="false" onAction="#showAllExpensesSettled" prefHeight="25.0" prefWidth="132.0" text="All" />
             <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="Button" />
             <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Button" />
          </children>

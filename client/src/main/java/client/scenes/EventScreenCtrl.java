@@ -226,12 +226,11 @@ public class EventScreenCtrl implements Initializable{
     }
 
     /**
-<<<<<<< HEAD
-=======
      * the action when we press the "All" button
      * @param actionEvent on button click event
      */
     public void showAllExpensesSettled(ActionEvent actionEvent) {
+        this.event = server.getEvent(invitationCode.getText());
         expensesLogListView.getItems().clear();
         for(Expense expense: event.getExpenses()){
             String log = "";
@@ -248,7 +247,6 @@ public class EventScreenCtrl implements Initializable{
     }
 
     /**
->>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
      * UI for settling current debts
      * @param actionEvent on button click event
      */
@@ -264,15 +262,5 @@ public class EventScreenCtrl implements Initializable{
         mainCtrl.showMainScreen();
     }
 
-
-    public void addExpenseToEventScreen(Event event) {
-        this.event = event;
-        //expensesLogListView.getItems().clear();
-        Set<Expense> eventExpenses = event.getExpenses();
-        Iterator<Expense> iterator = eventExpenses.iterator();
-        while(iterator.hasNext())
-            expensesLogListView.getItems().add(iterator.next().eventScreenString());
-        System.out.println(event);
-    }
 
 }

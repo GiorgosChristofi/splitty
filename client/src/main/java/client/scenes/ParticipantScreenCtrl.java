@@ -7,6 +7,7 @@ import commons.Event;
 import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -14,7 +15,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ParticipantScreenCtrl {
+public class ParticipantScreenCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final Translation translation;
@@ -52,6 +53,7 @@ public class ParticipantScreenCtrl {
     }
 
     public void initialize(URL location, ResourceBundle resources) {
+        title.textProperty().bind(translation.getStringBinding("Participants.Label.title"));
         abortButton.textProperty().bind(translation.getStringBinding("Participants.Button.abort"));
         okButton.textProperty().bind(translation.getStringBinding("Participants.Button.ok"));
         emailField.promptTextProperty().bind(translation.getStringBinding("Participants.Field.email"));

@@ -41,10 +41,12 @@ public class ExpenseService {
     public void addExpense(String eventId, Expense expense) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event not found"));
-        long extractedParticipantId = expense.getOwedTo().getId();
-        Participant participant = participantRepository.findById(extractedParticipantId)
-                .orElseThrow(() -> new EntityNotFoundException("Participant not found"));
-        expense.setOwedTo(participant);
+        if(expense.getOwedTo()!=null){
+            long extractedParticipantId = expense.getOwedTo().getId();
+            Participant participant = participantRepository.findById(extractedParticipantId)
+                    .orElseThrow(() -> new EntityNotFoundException("Participant not found"));
+            expense.setOwedTo(participant);
+        }
         event.addExpense(expense);
         expenseRepository.save(expense);
         eventRepository.save(event);
@@ -89,12 +91,14 @@ public class ExpenseService {
     public Expense editExpense(long id, Expense newExpense) {
         Expense expense = expenseRepository.findById(id) //
                 .orElseThrow(() -> new EntityNotFoundException("Expense not found"));
-        long extractedParticipantId = newExpense.getOwedTo().getId();
-        Participant participant = participantRepository.findById(extractedParticipantId)
-                .orElseThrow(() -> new EntityNotFoundException("Participant not found"));
+        if(expense.getOwedTo()!=null){
+            long extractedParticipantId = newExpense.getOwedTo().getId();
+            Participant participant = participantRepository.findById(extractedParticipantId)
+                    .orElseThrow(() -> new EntityNotFoundException("Participant not found"));
+            expense.setOwedTo(participant);
+        }
         expense.setDate(newExpense.getDate());
         expense.setName(newExpense.getName());
-        expense.setOwedTo(participant);
         expense.setPriceInCents(newExpense.getPriceInCents());
         return expenseRepository.save(expense);
     }

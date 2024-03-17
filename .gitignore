@@ -8,6 +8,7 @@ build/
 **/*.mv.db
 /coverage/*
 **/*.swp
+**/*.trace.db
 
 ### STS ###
 .apt_generated

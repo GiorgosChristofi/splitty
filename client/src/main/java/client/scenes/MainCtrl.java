@@ -16,7 +16,6 @@ import java.util.Set;
 public class MainCtrl {
 
     private Stage primaryStage;
-    private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
     private StartupScreenCtrl startupScreenCtrl;
     private EventScreenCtrl eventScreenCtrl;
@@ -24,7 +23,6 @@ public class MainCtrl {
     private EditTitleCtrl editTitleCtrl;
     private Scene startupScene;
     private Scene add;
-    private AddQuoteCtrl addCtrl;
     private Scene eventScene;
     private Scene expenseScene;
 
@@ -86,7 +84,10 @@ public class MainCtrl {
         //primaryStage.setScene(add);
         //add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
-
+    /**
+     * When called the view changes to the event specified as input.
+     * join an event (either used when creating or joining one) and updating the fields in the event screen
+     */
     public void switchToEventScreen(){
         Event event = server.getEvent(eventCode);
         eventScreenCtrl.refresh(event);
