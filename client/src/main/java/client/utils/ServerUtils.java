@@ -94,6 +94,30 @@ public class ServerUtils {
 				.post(Entity.entity(participantName, APPLICATION_JSON), Participant.class);
 	}
 
+	public void removeParticipant(String id, long participantId) {
+		Response response = ClientBuilder.newClient()
+				.target(serverURL)
+				.path("api/events/" + id + "/participants/" + participantId)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
+		if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
+			System.out.println("removed");
+		}
+		else {
+			System.out.println("not removed" + response.getStatus());
+		}
+	}
+
+	public Participant editParticipant(String id, Participant participant) {
+		return ClientBuilder.newClient()
+				.target(serverURL)
+				.path("api/events/" + id + "/participants/" + participant.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+	}
+
 	/**
 	 * Sends a POST request to add an expense to a specific event
 	 * @param eventId the id of the specific event

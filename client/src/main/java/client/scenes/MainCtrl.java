@@ -20,13 +20,12 @@ public class MainCtrl {
     private ExpenseScreenCtrl expenseScreenCtrl;
     private EditTitleCtrl editTitleCtrl;
     private Scene startupScene;
-    private Scene add;
+    private Scene participantListScene;
     private Scene eventScene;
     private Scene expenseScene;
-
     private Scene participantScene;
     private ParticipantScreenCtrl participantScreenCtrl;
-
+    private ParticipantListCtrl participantListCtrl;
     private Scene editTitleScene;
     private Scene managementOvervirewPasswordScene;
     private ManagementOverviewPasswordCtrl managementOverviewPasswordCtrl;
@@ -50,6 +49,7 @@ public class MainCtrl {
                            Pair<EventScreenCtrl, Parent> eventUI, Pair<ExpenseScreenCtrl, Parent> expenseUI,
 
                            Pair<ParticipantScreenCtrl, Parent> participantUI, Pair<EditTitleCtrl, Parent> editTitlePair,
+                           Pair<ParticipantListCtrl, Parent> participantListUI,
                            Pair<ManagementOverviewPasswordCtrl, Parent> managementOverviewPassworrdUI, Pair<ManagementOverviewScreenCtrl, Parent> managementOverviewScreenUI) {
 
 
@@ -64,7 +64,8 @@ public class MainCtrl {
 
         this.participantScene = new Scene(participantUI.getValue());
         this.participantScreenCtrl = participantUI.getKey();
-
+        this.participantListScene = new Scene(participantListUI.getValue());
+        this.participantListCtrl = participantListUI.getKey();
         this.editTitleCtrl = editTitlePair.getKey();
         this.editTitleScene = new Scene(editTitlePair.getValue());
         showMainScreen();

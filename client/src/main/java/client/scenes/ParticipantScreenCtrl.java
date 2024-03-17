@@ -88,6 +88,7 @@ public class ParticipantScreenCtrl implements Initializable {
         }
         Participant participant = new Participant(name);
         //remember email iban bic when available
+        clearFields();
         return participant;
     }
 
@@ -103,6 +104,13 @@ public class ParticipantScreenCtrl implements Initializable {
         }
 
         //TODO: Editing participants
+    }
+
+    public void clearFields (){
+        nameField.clear();
+        emailField.clear();
+        ibanField.clear();
+        bicField.clear();
     }
 
     public void refresh(Event event){

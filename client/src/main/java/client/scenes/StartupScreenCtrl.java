@@ -92,6 +92,7 @@ public class StartupScreenCtrl implements Initializable {
             return;
         }
         Event event = server.createEvent(title);
+        eventTitleTextBox.clear();
         joinEvent(event);
     }
 
@@ -107,6 +108,7 @@ public class StartupScreenCtrl implements Initializable {
         }
         try{
             Event event = server.getEvent(inviteCode);
+            inviteCodeTextBox.clear();
             joinEvent(event);
         }catch (BadRequestException exception){
             bindLabel(joinEventFeedback, "Startup.Label.InvalidCode");
