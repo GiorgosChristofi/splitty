@@ -43,13 +43,6 @@ public class ExpenseController {
     }
 
     /**
-<<<<<<< HEAD
-<<<<<<< HEAD
-     *
-=======
->>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
-=======
->>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
      * Deletes an expense from an event
      * @param id the id of the expense
      * @param eventId the id of the event to delete the expense from
@@ -74,9 +67,5 @@ public class ExpenseController {
         // this is the only method here impacted this way
         Expense updatedExpense = expenseService.editExpense(id, expense);
         return ResponseEntity.ok(updatedExpense);
-<<<<<<< HEAD
-=======
-
->>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
     }
 }

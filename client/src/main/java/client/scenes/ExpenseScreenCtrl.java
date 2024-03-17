@@ -10,17 +10,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
 import java.awt.*;
 import java.net.URL;
 import java.sql.Date;
 import java.util.*;
 
-import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.CheckBox;
 
 import java.util.List;
 
@@ -51,11 +52,11 @@ public class ExpenseScreenCtrl implements Initializable{
     @FXML
     private Label expenseType;
     @FXML
-    private Checkbox splitBetweenAllCheckBox;
+    private CheckBox splitBetweenAllCheckBox;
     @FXML
     private Label splitBetweenAllLabel;
     @FXML
-    private Checkbox splitBetweenCustomCheckBox;
+    private CheckBox splitBetweenCustomCheckBox;
     @FXML
     private Label getSplitBetweenCustomLabel;
     @FXML
@@ -87,6 +88,17 @@ public class ExpenseScreenCtrl implements Initializable{
         currency.setItems(FXCollections.observableArrayList("EUR"));
         choosePayer.setItems(getParticipantList());
         binds();
+        splitBetweenAllCheckBox.setOnAction(event -> {
+            if (splitBetweenAllCheckBox.isSelected()) {
+                splitBetweenCustomCheckBox.setSelected(false);
+            }
+        });
+
+        splitBetweenCustomCheckBox.setOnAction(event -> {
+            if (splitBetweenCustomCheckBox.isSelected()) {
+                splitBetweenAllCheckBox.setSelected(false);
+            }
+        });
     }
 
     public ObservableList<String> getParticipantList() {
