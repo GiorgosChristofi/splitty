@@ -42,6 +42,5 @@ public class ParticipantListCtrl implements Initializable {
 
 
     public void goBack() {
-
     }
 }
