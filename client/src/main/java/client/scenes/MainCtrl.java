@@ -47,7 +47,6 @@ public class MainCtrl {
 
     public void initialize(Stage primaryStage, Pair<StartupScreenCtrl, Parent> overview,
                            Pair<EventScreenCtrl, Parent> eventUI, Pair<ExpenseScreenCtrl, Parent> expenseUI,
-
                            Pair<ParticipantScreenCtrl, Parent> participantUI, Pair<EditTitleCtrl, Parent> editTitlePair,
                            Pair<ParticipantListCtrl, Parent> participantListUI,
                            Pair<ManagementOverviewPasswordCtrl, Parent> managementOverviewPassworrdUI, Pair<ManagementOverviewScreenCtrl, Parent> managementOverviewScreenUI) {

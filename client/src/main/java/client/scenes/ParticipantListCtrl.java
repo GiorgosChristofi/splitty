@@ -37,10 +37,11 @@ public class ParticipantListCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.cancel.textProperty().bind(translation.getStringBinding("participantList.goBack"));
+//        textProperty().bind(translation.getStringBinding("participantList.goBack"));
     }
 
 
     public void goBack() {
+
     }
 }

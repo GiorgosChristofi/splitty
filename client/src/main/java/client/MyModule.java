@@ -15,6 +15,7 @@
  */
 package client;
 
+import client.scenes.ParticipantListCtrl;
 import client.utils.ConfigUtils;
 import client.utils.ObservableResourceFactory;
 import com.google.inject.Binder;
@@ -33,7 +34,9 @@ public class MyModule implements Module {
         Names.bindProperties(binder, properties);
 
         binder.bind(ObservableResourceFactory.class).in(Scopes.SINGLETON);
-
+        binder.bind(ParticipantListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
     }
+
+
 }
