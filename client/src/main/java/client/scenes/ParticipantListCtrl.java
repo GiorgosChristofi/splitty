@@ -14,19 +14,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ParticipantListCtrl implements Initializable {
-    @FXML
-    private TextField title;
-    @FXML
-    private Label label;
-    @FXML
-    private Button confirm;
-    @FXML
-    private Button cancel;
-
     ServerUtils server;
     MainCtrl mainCtrl;
     Translation translation;
-    Event event;
 
     @Inject
     public ParticipantListCtrl(MainCtrl mainCtrl, ServerUtils server, Translation translation) {
@@ -39,7 +29,6 @@ public class ParticipantListCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 //        textProperty().bind(translation.getStringBinding("participantList.goBack"));
     }
-
 
     public void goBack() {
     }
