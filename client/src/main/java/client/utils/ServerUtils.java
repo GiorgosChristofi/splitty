@@ -94,6 +94,11 @@ public class ServerUtils {
 				.post(Entity.entity(participantName, APPLICATION_JSON), Participant.class);
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @param participantId
+	 */
 	public void removeParticipant(String id, long participantId) {
 		Response response = ClientBuilder.newClient()
 				.target(serverURL)
@@ -109,6 +114,12 @@ public class ServerUtils {
 		}
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @param participant
+	 * @return
+	 */
 	public Participant editParticipant(String id, Participant participant) {
 		return ClientBuilder.newClient()
 				.target(serverURL)
