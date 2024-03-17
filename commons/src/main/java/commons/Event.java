@@ -1,10 +1,6 @@
 package commons;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
-<<<<<<< HEAD
-=======
-
->>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -28,7 +24,6 @@ public class Event{
     private LocalDateTime lastActivity;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Participant> participants;
-<<<<<<< HEAD
     @OneToMany(mappedBy = "event", orphanRemoval = true)
     @JsonIgnoreProperties({"event"})
     private Set<Expense> expenses;
@@ -44,14 +39,6 @@ public class Event{
 
 
     /**
-=======
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = {"event"})
-    private Set<Expense> expenses;
-
-
-    /***
->>>>>>> b693a523caaeb29967cfe3f89abe2cd132efb36c
      * Constructor for object mappers
      */
     @SuppressWarnings("unused")
