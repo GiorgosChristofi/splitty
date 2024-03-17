@@ -30,6 +30,7 @@ public class MainCtrl {
     private Scene managementOvervirewPasswordScene;
     private ManagementOverviewPasswordCtrl managementOverviewPasswordCtrl;
     private Scene managementOverviewScreenScene;
+    private ManagementOverviewScreenCtrl managementOverviewScreenCtrl;
 
     private final Translation translation;
     @Inject
@@ -70,6 +71,7 @@ public class MainCtrl {
         showMainScreen();
         this.managementOvervirewPasswordScene = new Scene(managementOverviewPassworrdUI.getValue());
         this.managementOverviewScreenScene = new Scene(managementOverviewScreenUI.getValue());
+        this.managementOverviewScreenCtrl = managementOverviewScreenUI.getKey();
         primaryStage.show();
     }
 
@@ -143,6 +145,7 @@ public class MainCtrl {
     public void switchToManagementOverviewScreen(){
         primaryStage.setScene(managementOverviewScreenScene);
         primaryStage.setTitle("Management Overview");
+        managementOverviewScreenCtrl.initializeAllEvents();
     }
 
     public void switchEvents(String eventCode) {

@@ -247,6 +247,9 @@ public class Event{
     public LocalDateTime getLastActivity(){
         return lastActivity;
     }
+    public void setLastActivity(LocalDateTime lastActivity) {
+        this.lastActivity = lastActivity;
+    }
 
     /***
      * Equals method using EqualsBuilder

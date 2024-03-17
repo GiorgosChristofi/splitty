@@ -2,6 +2,9 @@ package commons;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -251,5 +254,12 @@ public class EventTest {
     public void noExpenseTest(){
         var result = event.getTotalSpending();
         assertEquals(0, result);
+    }
+
+    @Test
+    public void GetAndSetLastActivity() {
+        LocalDateTime time = LocalDateTime.of(0, 1, 1, 0, 0);
+        event.setLastActivity(time);
+        assertEquals(event.getLastActivity(), time);
     }
 }

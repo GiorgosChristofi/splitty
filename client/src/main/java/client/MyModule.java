@@ -17,6 +17,7 @@ package client;
 
 import client.scenes.ParticipantListCtrl;
 import client.utils.ConfigUtils;
+import client.utils.ManagementOverviewUtils;
 import client.utils.ObservableResourceFactory;
 import com.google.inject.Binder;
 import com.google.inject.Module;
