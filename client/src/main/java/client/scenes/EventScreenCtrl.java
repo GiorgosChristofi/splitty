@@ -137,6 +137,8 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
             .bind(translation.getStringBinding("Event.Button.AddTag"));
         showStatisticsButton.textProperty()
             .bind(translation.getStringBinding("Event.Button.Statistics"));
+        allExpenses.textProperty()
+                .bind(translation.getStringBinding("Event.Button.ShowAllExpenses"));
         initializeEditTitle();
         addGeneratedImages();
         initializeParticipantsCBox();
