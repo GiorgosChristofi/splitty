@@ -255,7 +255,7 @@ public class ManagementOverviewScreenCtrl implements Initializable {
         objectMapper.registerModule(new JavaTimeModule());
         try {
             // Write object to JSON file
-            File backupFile = new File(String.format("./backups/%s.json", eventId));
+            File backupFile = new File(String.format("client/backups/%s.json", eventId));
             objectMapper.writeValue(backupFile, event);
             System.out.printf("Event %s has been exported to %s.json%n", eventId, eventId);
             bindLabel(backupEventFeedbackLabel, "MOSCtrl.SuccessExport");
@@ -277,7 +277,7 @@ public class ManagementOverviewScreenCtrl implements Initializable {
         objectMapper.registerModule(new JavaTimeModule());
         try {
             // Read JSON data from file and deserialize it into object
-            File backupFile = readFile(eventId);
+            File backupFile = readFile( eventId);
             Event event = objectMapper.readValue(backupFile, Event.class);
             System.out.println("Read from file: " + event);
             bindLabel(backupEventFeedbackLabel, "MOSCtrl.SuccessImport");
@@ -299,7 +299,7 @@ public class ManagementOverviewScreenCtrl implements Initializable {
      * @return File the backup file
      */
     public File readFile(String eventId) {
-        return new File(String.format("./backups/%s.json", eventId));
+        return new File(String.format("./client/backups/%s.json", eventId));
     }
 
     /**

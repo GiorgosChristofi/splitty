@@ -162,7 +162,7 @@ public class EventTest {
         event.addExpense(expense1);
         event.addExpense(expense2);
 
-        var result = RoundUtils.roundMap(event.getExpenseShare(), RoundingMode.HALF_UP);
+        var result = RoundUtils.roundMap(event.getExpenseShare(true), RoundingMode.HALF_UP);
         assertEquals(10*cents, result.get(participant1));
         assertEquals(20*cents, result.get(participant2));
     }
@@ -189,7 +189,7 @@ public class EventTest {
             event.addExpense(expense);
         }
 
-        var result = RoundUtils.roundMap(event.getExpenseShare(), RoundingMode.HALF_UP);
+        var result = RoundUtils.roundMap(event.getExpenseShare(true), RoundingMode.HALF_UP);
         assertEquals(1000, result.get(participant1));
         assertEquals(1000, result.get(participant2));
         assertEquals(1000, result.get(participant3));

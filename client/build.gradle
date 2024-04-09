@@ -17,6 +17,9 @@ java {
 	sourceCompatibility = '21'
 }
 
+test{
+	workingDir = rootProject.projectDir
+}
 
 dependencies {
 	implementation project(":commons")
