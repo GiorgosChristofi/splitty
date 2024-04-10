@@ -51,7 +51,7 @@ public class LanguageIndicatorCtrl {
                     if(item.getLanguage().equals("ro"))
                         setText("Romanian");
                     try {
-                        Image img = new Image("images/flags/" + item.getLanguage() + "_flag - Copy.png");
+                        Image img = new Image("images/flags/" + item.getLanguage() + "_flag - small.png");
                         ImageView flag =
                             new ImageView(img);
                         setGraphic(flag);
