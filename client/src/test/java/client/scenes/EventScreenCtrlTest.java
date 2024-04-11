@@ -1,56 +1,64 @@
 package client.scenes;
 
+import client.utils.ImageUtils;
+import client.utils.ServerUtils;
+import client.utils.Translation;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.testfx.framework.junit5.ApplicationExtension;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+@ExtendWith({MockitoExtension.class, ApplicationExtension.class})
 class EventScreenCtrlTest {
-
     @Mock
-    private EventScreenCtrl eventScreenCtrl = mock(EventScreenCtrl.class);
-    private Participant participant1 = new Participant(1, "John");
-    private Participant participant2 = new Participant(2, "Jane");
-    private Participant participant3 = new Participant(3, "Mike");
-    private Participant participant4 = new Participant(4, "Bob");
-    private Event event = new Event();
-    private Expense expense1 = new Expense("Drinks", 12, null, participant1);
-    private Expense expense2 = new Expense("Food", 20, null, participant2);
-    @Test
-    void generateTextForExpenseLabelAllTest() {
-        when(eventScreenCtrl.generateTextForExpenseLabel(expense1))
-            .thenReturn(expense1.stringOnScreen() + "\n(All)");
-        Set<Participant> payers = new HashSet<>();
-        payers.add(participant1);
-        payers.add(participant2);
-        payers.add(participant3);
-        payers.add(participant4);
-        expense1.setParticipantToExpense(payers);
-        assertTrue(expense1.getParticipantsInExpense().contains(participant1));
-        String result = eventScreenCtrl.generateTextForExpenseLabel(expense1);
-        assertEquals(result, "John paid 0.12" + '\u20ac' + " for Drinks\n" +
-            "(All)");
+    ServerUtils server;
+    @Mock
+    MainCtrl mainCtrl;
+    @Mock
+    Translation translation;
+    @Mock
+    LanguageIndicatorCtrl languageCtrl;
+    @Mock
+    ImageUtils imageUtils;
+
+    @InjectMocks
+    EventScreenCtrl sut;
+    private Participant participant1;
+    private Participant participant2;
+    private Participant participant3;
+    private Participant participant4;
+    private Event event;
+    private Expense expense1;
+
+    @BeforeEach
+    public void setup(){
+        participant1 = new Participant(1, "John");
+        participant2 = new Participant(2, "Jane");
+        participant3 = new Participant(3, "Mike");
+        participant4 = new Participant(4, "Bob");
+        event = new Event("Title", null);
+        event.addParticipant(participant1);
+        event.addParticipant(participant2);
+        event.addParticipant(participant3);
+        event.addParticipant(participant4);
+        expense1 = new Expense("Drinks", 12, null, participant1);
+        Expense expense2 = new Expense("Food", 20, null, participant2);
+        event.addExpense(expense1);
+        event.addExpense(expense2);
     }
-    @Test
-    void generateTextForExpenseLabelCustomTest() {
-        when(eventScreenCtrl.generateTextForExpenseLabel(expense1))
-            .thenReturn(expense1.stringOnScreen() + "\n(John Jane )");
-        Set<Participant> payers = new HashSet<>();
-        payers.add(participant1);
-        payers.add(participant2);
-        expense1.setParticipantToExpense(payers);
-        assertTrue(expense1.getParticipantsInExpense().contains(participant1));
-        assertFalse(expense1.getParticipantsInExpense().contains(participant3));
-        String result = eventScreenCtrl.generateTextForExpenseLabel(expense1);
-        assertEquals(result, "John paid 0.12" + '\u20ac' + " for Drinks\n" +
-            "(John Jane )");
+
+    @BeforeAll
+    static void testFXSetup(){
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+        System.setProperty("glass.platform", "Monocle");
+        System.setProperty("monocle.platform", "Headless");
+        System.setProperty("prism.order", "sw");
     }
 }

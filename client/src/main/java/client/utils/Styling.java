@@ -24,7 +24,7 @@ public class Styling {
      * @param node the node to apply the styling to
      * @param style the style to apply
      */
-    public static void applyStyling(Node node, String style) {
+    public void applyStyling(Node node, String style) {
         if (node != null) {
             if (!node.getStyleClass().contains(style)) {
                 node.getStyleClass().add(style);
@@ -38,7 +38,7 @@ public class Styling {
      * @param oldStyle the old style to remove
      * @param newStyle the new style to add
      */
-    public static void changeStyling(Node node, String oldStyle, String newStyle) {
+    public void changeStyling(Node node, String oldStyle, String newStyle) {
         if (node != null) {
             node.getStyleClass().remove(oldStyle);
             applyStyling(node, newStyle);
@@ -50,7 +50,7 @@ public class Styling {
      * @param node the node to remove the styling from
      * @param style the style to remove
      */
-    public static void removeStyling(Node node, String style) {
+    public void removeStyling(Node node, String style) {
         if (node != null) {
             node.getStyleClass().remove(style);
         }

@@ -210,18 +210,6 @@ public class Expense{
     }
 
     /**
-     * Returns a screen friendly string representation of the expense
-     * @return a screen friendly string representation of the expense
-     */
-    public String stringOnScreen() {
-        double price = priceInCents / 100.;
-        if(price == (int)price)
-            return owedTo.getName() + " paid " + (int) price + '\u20ac' + " for " + name;
-        return owedTo.getName() + " paid " + price + '\u20ac' + " for " + name;
-
-    }
-
-    /**
      * Sets the participants in the expense
      * @param participants the participants to set
      */

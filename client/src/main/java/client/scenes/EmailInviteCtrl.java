@@ -11,8 +11,12 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EmailInviteCtrl implements Initializable, SimpleRefreshable {
+    @FXML
+    private Button goBackButton;
     @FXML
     private Label titleLabel;
     @FXML
@@ -36,7 +40,6 @@ public class EmailInviteCtrl implements Initializable, SimpleRefreshable {
     private MainCtrl mainCtrl;
     private EmailHandler emailHandler;
     private Event event;
-    private ConfigUtils configUtils;
 
     /**
      * Constructor
@@ -44,15 +47,13 @@ public class EmailInviteCtrl implements Initializable, SimpleRefreshable {
      * @param server the server to use
      * @param mainCtrl the main controller
      * @param emailHandler the email handler to use
-     * @param configUtils the configUtils
      */
     @Inject
-    public EmailInviteCtrl(Translation translation, ServerUtils server, MainCtrl mainCtrl, EmailHandler emailHandler, ConfigUtils configUtils) {
+    public EmailInviteCtrl(Translation translation, ServerUtils server, MainCtrl mainCtrl, EmailHandler emailHandler) {
         this.translation = translation;
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.emailHandler = emailHandler;
-        this.configUtils = configUtils;
     }
 
     /**
@@ -90,17 +91,37 @@ public class EmailInviteCtrl implements Initializable, SimpleRefreshable {
         } else {
             nameFeedbackLabel.textProperty().bind(translation.getStringBinding("Empty"));
         }
-        if (email.isEmpty()) {
+        if (email.isEmpty() || !checkEmail(email)){
             emailFeedbackLabel.textProperty().bind(translation.getStringBinding("Email.EmailFeedbackLabel"));
         } else {
             emailFeedbackLabel.textProperty().bind(translation.getStringBinding("Empty"));
         }
-        if (!name.isEmpty() && !email.isEmpty()) {
+        if (!name.isEmpty() && !email.isEmpty() && checkEmail(email)) {
             Thread emailThread = setupEmailThread(email, participant);
             emailThread.start();
             clearFields();
             mainCtrl.switchScreens(EventScreenCtrl.class);
         }
+    }
+
+    /**
+     * checks if the inserted email has an appropriate pattern
+     * @param email the value inserted by the user
+     * @return true if the value is correct, false otherwise
+     */
+    public boolean checkEmail (String email){
+        if (email == null || email.isEmpty()){
+            return false;
+        }
+        String emailLike = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern emailPattern = Pattern.compile(emailLike);
+        Matcher matcher = emailPattern.matcher(email);
+        if (matcher.matches()) {
+            return true;
+        } else {
+            System.out.println("Invalid Email");
+        }
+        return false;
     }
 
     /**
@@ -114,26 +135,15 @@ public class EmailInviteCtrl implements Initializable, SimpleRefreshable {
             boolean result = emailHandler.sendEmail(email, "Invited to splitty!", emailHandler.getInviteText(event));
             if (result){
                 server.addParticipant(event.getId(), participant);
-                Platform.runLater(() -> {
-                    System.out.println("Successfully sent email!");
-                    Alert a = new Alert(Alert.AlertType.INFORMATION);
-                    a.contentTextProperty().bind(translation.getStringBinding("Event.Label.EmailFeedback.Success"));
-                    a.titleProperty().bind(translation.getStringBinding("Email.SuccessTitle"));
-                    a.headerTextProperty().bind(translation.getStringBinding("Email.EmailFeedback"));
-                    a.show();
-                });
-            }else{
-                Platform.runLater(() -> {
-                    System.out.println("Error while sending email!");
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.contentTextProperty().bind(translation.getStringBinding("Event.Label.EmailFeedback.Fail"));
-                    a.titleProperty().bind(translation.getStringBinding("Email.ErrorTitle"));
-                    a.headerTextProperty().bind(translation.getStringBinding("Email.EmailFeedback"));
-                    a.show();
-                });
+
             }
+            Platform.runLater(() -> {
+                mainCtrl.showEmailPrompt(result);
+            });
         });
     }
+
+
 
     /**
      * Cancels the invitation and switches back to the event screen
@@ -158,5 +168,46 @@ public class EmailInviteCtrl implements Initializable, SimpleRefreshable {
     public void refresh(Event event) {
         this.event = event;
     }
+
+    /**
+     * Sets the name text field
+     * @param nameTextField the textField to set it to
+     */
+    public void setNameTextField(TextField nameTextField) {
+        this.nameTextField = nameTextField;
+    }
+
+    /**
+     * Sets the email text field
+     * @param emailTextField the textField to set it to
+     */
+    public void setEmailTextField(TextField emailTextField) {
+        this.emailTextField = emailTextField;
+    }
+
+    /**
+     * Sets the invite button
+     * @param inviteButton the button to set it to
+     */
+    public void setInviteButton(Button inviteButton) {
+        this.inviteButton = inviteButton;
+    }
+
+    /**
+     * Sets the name feedback label
+     * @param nameFeedbackLabel the label to set it to
+     */
+    public void setNameFeedbackLabel(Label nameFeedbackLabel) {
+        this.nameFeedbackLabel = nameFeedbackLabel;
+    }
+
+    /**
+     * Sets the email feedback label
+     * @param emailFeedbackLabel the label to set it to
+     */
+    public void setEmailFeedbackLabel(Label emailFeedbackLabel) {
+        this.emailFeedbackLabel = emailFeedbackLabel;
+    }
+
 
 }

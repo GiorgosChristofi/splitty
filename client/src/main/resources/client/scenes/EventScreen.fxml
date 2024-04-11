@@ -63,7 +63,7 @@
          </graphic></Button>
       <HBox fx:id="buttonsHBox" layoutX="160.0" layoutY="311.0" prefHeight="25.0" prefWidth="374.0">
          <children>
-            <Button fx:id="allExpenses" mnemonicParsing="false" onAction="#showAllExpenseList" prefHeight="25.0" prefWidth="124.66" styleClass="positiveButton" text="All" />
+            <Button fx:id="allExpenses" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="25.0" prefWidth="124.66" styleClass="positiveButton" text="All" />
             <Button fx:id="fromButton" mnemonicParsing="false" onAction="#fromFilter" prefHeight="25.0" prefWidth="124.66" styleClass="positiveButton" text="From..." />
             <Button fx:id="inButton" mnemonicParsing="false" onAction="#includingFilter" prefHeight="25.0" prefWidth="124.66" styleClass="positiveButton" text="Including..." />
          </children></HBox>

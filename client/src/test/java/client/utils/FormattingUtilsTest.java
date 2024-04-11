@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FormattingUtilsTest {
-    private final String currency = "\u20ac";
+    private final String currency = FormattingUtils.CURRENCY;
     @Test
     void getFormattedPrice2DP() {
         int amount = 4;

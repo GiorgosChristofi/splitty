@@ -8,6 +8,7 @@ import com.google.inject.name.Named;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -244,5 +245,26 @@ public class MainCtrl {
      */
     public void switchEvents(String eventCode) {
         manager.switchClientEvent(eventCode);
+    }
+
+    /**
+     * Shows an alert that tells the user if the email was sent successfully
+     * @param wasSuccessful true if the email was sent successfully, false otherwise
+     */
+    public void showEmailPrompt(boolean wasSuccessful) {
+        Alert a;
+        if (wasSuccessful){
+            System.out.println("Successfully sent email!");
+            a = new Alert(Alert.AlertType.INFORMATION);
+            a.contentTextProperty().bind(translation.getStringBinding("Event.Label.EmailFeedback.Success"));
+            a.titleProperty().bind(translation.getStringBinding("Email.SuccessTitle"));
+        }else{
+            System.out.println("Error while sending email!");
+            a = new Alert(Alert.AlertType.ERROR);
+            a.contentTextProperty().bind(translation.getStringBinding("Event.Label.EmailFeedback.Fail"));
+            a.titleProperty().bind(translation.getStringBinding("Email.ErrorTitle"));
+        }
+        a.headerTextProperty().bind(translation.getStringBinding("Email.EmailFeedback"));
+        a.show();
     }
 }
