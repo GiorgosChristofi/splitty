@@ -58,10 +58,7 @@ public class Participant {
     public boolean hasBankAccount(){
         return (!Objects.equals(legalName, "")
                 && !Objects.equals(iban, "")
-                && !Objects.equals(bic, "")
-                && legalName != null
-                && iban != null
-                && bic != null);
+                && !Objects.equals(bic, "") );
     }
 
     /***

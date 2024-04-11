@@ -59,9 +59,7 @@ public class ManagementOverviewScreenCtrl implements Initializable {
     private final Translation translation;
     private final ManagementOverviewUtils utils;
     private final ImageUtils imageUtils;
-    private final StringGenerationUtils stringUtils;
     private boolean listWasInitialized = false;
-    private Styling styling;
 
     /**
      * Constructor
@@ -70,21 +68,16 @@ public class ManagementOverviewScreenCtrl implements Initializable {
      * @param translation the Translation to use
      * @param utils the ManagementOverviewUtils to use
      * @param imageUtils the ImageUtils to use
-     * @param styling the Styling to use
-     * @param stringUtils the StringGenerationUtils to use
      */
     @Inject
     public ManagementOverviewScreenCtrl(ServerUtils server, MainCtrl mainCtrl, Translation translation,
-                                        ManagementOverviewUtils utils, ImageUtils imageUtils,
-                StringGenerationUtils stringUtils, Styling styling) {
+                                        ManagementOverviewUtils utils, ImageUtils imageUtils) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.translation = translation;
         this.utils = utils;
         this.imageUtils = imageUtils;
-        this.stringUtils = stringUtils;
         objectMapper = new ObjectMapper();
-        this.styling = styling;
     }
     /**
      * Initialize basic features for the Management Overview Screen
@@ -127,10 +120,10 @@ public class ManagementOverviewScreenCtrl implements Initializable {
             protected void updateItem(Event event, boolean empty) {
                 super.updateItem(event, empty);
                 if(empty || event == null) {
-                    textProperty().bind(translation.getStringBinding("empty"));
+                    setText(null);
                     setGraphic(null);
                 } else {
-                    textProperty().bind(stringUtils.generateTextForEventLabel(event));
+                    setText("Title: " + event.getTitle() + ", ID: " + event.getId());
                 }
             }
         });
@@ -139,11 +132,11 @@ public class ManagementOverviewScreenCtrl implements Initializable {
             protected void updateItem(Participant participant, boolean empty){
                 super.updateItem(participant, empty);
                 if(empty || participant == null){
-                    textProperty().bind(translation.getStringBinding("empty"));
+                    setText(null);
                     setGraphic(null);
                 }
                 else{
-                    textProperty().bind(stringUtils.generateTextForParticipantLabel(participant));
+                    setText("Participant: " + participant.getName());
                 }
             }
         });
@@ -152,11 +145,15 @@ public class ManagementOverviewScreenCtrl implements Initializable {
             protected void updateItem(Expense expense, boolean empty){
                 super.updateItem(expense, empty);
                 if(empty || expense == null){
-                    textProperty().bind(translation.getStringBinding("empty"));
+                    setText(null);
                     setGraphic(null);
                 }
                 else{
-                    textProperty().bind(stringUtils.generateTextForExpenseAdminLabel(expense));
+                    String expenseString = expense.getOwedTo().getName() + " paid ";
+                    expenseString+=(float)(expense.getPriceInCents()/100) + " euro for ";
+                    expenseString+=expense.getName() + " on ";
+                    expenseString+=expense.getDate().toString();
+                    setText(expenseString);
                 }
             }
         });
@@ -246,7 +243,7 @@ public class ManagementOverviewScreenCtrl implements Initializable {
     @FXML
     public void exportButtonClicked() {
         bindLabel(backupEventFeedbackLabel, "empty");
-        styling.changeStyling(backupEventFeedbackLabel, "successText", "errorText");
+        Styling.changeStyling(backupEventFeedbackLabel, "successText", "errorText");
         String eventId = getTextBoxText(backupEventIDTextField);
         Event event;
         try{
@@ -262,7 +259,7 @@ public class ManagementOverviewScreenCtrl implements Initializable {
             objectMapper.writeValue(backupFile, event);
             System.out.printf("Event %s has been exported to %s.json%n", eventId, eventId);
             bindLabel(backupEventFeedbackLabel, "MOSCtrl.SuccessExport");
-            styling.changeStyling(backupEventFeedbackLabel, "errorText", "successText");
+            Styling.changeStyling(backupEventFeedbackLabel, "errorText", "successText");
         } catch (IOException e) {
             bindLabel(backupEventFeedbackLabel, "MOSCtrl.ErrorExportingEvent");
             System.out.printf("Error exporting event %s%n", eventId);
@@ -275,7 +272,7 @@ public class ManagementOverviewScreenCtrl implements Initializable {
     @FXML
     public void importButtonClicked() {
         bindLabel(backupEventFeedbackLabel, "empty");
-        styling.changeStyling(backupEventFeedbackLabel, "successText", "errorText");
+        Styling.changeStyling(backupEventFeedbackLabel, "successText", "errorText");
         String eventId = getTextBoxText(backupEventIDTextField);
         objectMapper.registerModule(new JavaTimeModule());
         try {
@@ -288,7 +285,7 @@ public class ManagementOverviewScreenCtrl implements Initializable {
                 server.deleteEvent(eventId); //event IDs are unique, but this should enable updating an event this way
             }
             server.addEvent(event);
-            styling.changeStyling(backupEventFeedbackLabel, "errorText", "successText");
+            Styling.changeStyling(backupEventFeedbackLabel, "errorText", "successText");
 
         } catch (IOException e) {
             bindLabel(backupEventFeedbackLabel, "MOSCtrl.ErrorImportingEvent");

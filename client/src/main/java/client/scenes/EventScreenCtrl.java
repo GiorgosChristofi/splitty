@@ -18,8 +18,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 import static javafx.geometry.Pos.CENTER_RIGHT;
@@ -68,7 +71,6 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
     private final Translation translation;
     private final LanguageIndicatorCtrl languageCtrl;
     private final ImageUtils imageUtils;
-    private final StringGenerationUtils stringUtils;
     private Event event;
     private final Map<Long, HBox> hBoxMap;
     private Button selectedExpenseListButton;
@@ -81,7 +83,6 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
     private Button emailInviteButton;
     @FXML
     private Button transferMoneyButton;
-    private Styling styling;
     /**
      * Constructor
      *
@@ -90,23 +91,22 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
      * @param translation the Translation to use
      * @param languageCtrl the LanguageIndicator to use
      * @param imageUtils  the ImageUtils to use
-     * @param styling     the Styling to use
-     * @param stringUtils the StringGenerationUtils to use
      */
     @Inject
     public EventScreenCtrl(ServerUtils server, MainCtrl mainCtrl, Translation translation,
-                           LanguageIndicatorCtrl languageCtrl, ImageUtils imageUtils,
-                StringGenerationUtils stringUtils, Styling styling) {
+                           LanguageIndicatorCtrl languageCtrl, ImageUtils imageUtils) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.translation = translation;
         this.imageUtils = imageUtils;
-        this.stringUtils = stringUtils;
         this.event = null;
         this.hBoxMap = new HashMap<>();
+       // this.buttonsHBox = new HBox();
+        this.allExpenses = new Button();
+        this.fromButton = new Button();
+        this.inButton = new Button();
         this.languageCtrl = languageCtrl;
         this.selectedExpenseListButton = null;
-        this.styling = styling;
     }
 
     /**
@@ -123,9 +123,6 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.allExpenses = new Button();
-        this.fromButton = new Button();
-        this.inButton = new Button();
         invitationCode.setEditable(false);
         testEmailButton.textProperty().bind(translation.getStringBinding("Event.Button.TestEmail"));
         participantsName.textProperty()
@@ -145,7 +142,7 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
         initializeEditTitle();
         addGeneratedImages();
         initializeParticipantsCBox();
-        emailHandler = new EmailHandler(translation);
+        emailHandler = new EmailHandler();
         if (emailHandler.isConfigured()) {
             enableEmailFeatures();
 
@@ -161,8 +158,8 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
      * Enables the email features
      */
     private void enableEmailFeatures() {
-        styling.removeStyling(testEmailButton, "disabledButton");
-        styling.removeStyling(emailInviteButton, "disabledButton");
+        Styling.removeStyling(testEmailButton, "disabledButton");
+        Styling.removeStyling(emailInviteButton, "disabledButton");
         emailInviteButton.setOnAction(event -> mainCtrl.switchScreens(EmailInviteCtrl.class));
         testEmailButton.setOnAction(event -> sendTestEmail());
     }
@@ -378,12 +375,12 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
      * @return the generated hBox, containing the expense details
      */
     public HBox generateExpenseBox(Expense expense, Image removeImage) {
-        ObservableValue<String> expenseTextValue;
+        String log = "";
         if(expense.getPriceInCents() > 0)
-            expenseTextValue = stringUtils.generateTextForExpenseLabel(expense, event.getParticipants().size());
-        else
-            expenseTextValue = stringUtils.generateTextForMoneyTransfer(expense);
-        Label expenseText = generateExpenseLabel(expense.getId(), expenseTextValue);
+            log = generateTextForExpenseLabel(expense);
+        else if(expense.getPriceInCents() < 0)
+            log = generateTextForMoneyTransfer(expense);
+        Label expenseText = generateExpenseLabel(expense.getId(), log);
         ImageView xButton = generateRemoveButton(expense.getId(), removeImage);
         Label dateLabel = new Label();
         dateLabel.setPrefWidth(40);
@@ -410,15 +407,64 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
     }
 
     /**
+     * Generates the expense description for money transfers in this format: "A paid B 60.0"
+     * @param expense The money transfer
+     * @return Description of money transfer
+     */
+    private String generateTextForMoneyTransfer(Expense expense) {
+        Participant from = (Participant) expense.getParticipantsInExpense().toArray()[0];
+        double amount = expense.getPriceInCents() / -100.0;
+        return from.getName() +
+                " paid " +
+                expense.getOwedTo().getName() +
+                " " + amount;
+    }
+
+    /**
+     *
+     * @param expense the expense for which we are generating the
+     * label
+     * @return the resulting generated string
+     */
+    public String generateTextForExpenseLabel(Expense expense) {
+        String log = expense.stringOnScreen();
+        Set<Participant> participants = event.getParticipants();
+        boolean all = true;
+        for(Participant participant: participants) {
+            all = false;
+            for (Participant participant1 : expense.getParticipantsInExpense())
+                if (participant.getId() == participant1.getId()) {
+                    all = true;
+                    break;
+                }
+            if(!all)
+                break;
+        }
+        if(all)
+            log += '\n' + "(All)";
+        else {
+            if(expense.getParticipantsInExpense().isEmpty())
+                removeFromList(expense.getId());
+            log += '\n' + "(";
+            for(Participant participant: expense.getParticipantsInExpense())
+                if(event.getParticipants().contains(participant)) {
+                    log += participant.getName();
+                    log += " ";
+                }
+            log += ")";
+        }
+        return log;
+    }
+
+    /**
      * Creates a label that will later be added to the hBox from the expense listview
      * Furthermore, it allows the client to access set expense and edit it
      * @param expenseId the id of the expense we are creating a label for
-     * @param expenseDescription the description of the expense
+     * @param expenseTitle the title of the expense
      * @return the created label
      */
-    public Label generateExpenseLabel(long expenseId, ObservableValue<String> expenseDescription) {
-        Label expense = new Label();
-        expense.textProperty().bind(expenseDescription);
+    public Label generateExpenseLabel(long expenseId, String expenseTitle) {
+        Label expense = new Label(expenseTitle);
         expense.setOnMouseEntered(mouseEvent -> mainCtrl.getEventScene().setCursor(Cursor.HAND));
         expense.setOnMouseExited(mouseEvent -> mainCtrl.getEventScene().setCursor(Cursor.DEFAULT));
         expense.setOnMouseClicked(mouseEvent -> mainCtrl.switchToEditExpense(expenseId));
@@ -476,7 +522,7 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
         if (!emailHandler.isConfigured()){
             return;
         }
-        styling.changeStyling(emailFeedbackLabel, "errorText", "successText");
+        Styling.changeStyling(emailFeedbackLabel, "errorText", "successText");
         emailFeedbackLabel.textProperty()
                 .bind(translation.getStringBinding("Event.Label.EmailFeedback.Sending"));
         Thread t = new Thread(() ->
@@ -484,11 +530,11 @@ public class EventScreenCtrl implements Initializable, SimpleRefreshable{
             boolean emailSent = emailHandler.sendTestEmail();
             Platform.runLater(() -> {
                 if (emailSent) {
-                    styling.changeStyling(emailFeedbackLabel, "errorText", "successText");
+                    Styling.changeStyling(emailFeedbackLabel, "errorText", "successText");
                     emailFeedbackLabel.textProperty()
                             .bind(translation.getStringBinding("Event.Label.EmailFeedback.Success"));
                 } else if (emailHandler.isConfigured()) {
-                    styling.changeStyling(emailFeedbackLabel, "successText", "errorText");
+                    Styling.changeStyling(emailFeedbackLabel, "successText", "errorText");
                     emailFeedbackLabel.textProperty()
                             .bind(translation.getStringBinding("Event.Label.EmailFeedback.Fail"));
                 }

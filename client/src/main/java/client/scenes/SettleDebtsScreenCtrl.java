@@ -41,8 +41,6 @@ public class SettleDebtsScreenCtrl implements Initializable, SimpleRefreshable {
     private VBox settleVBox;
     private Event event;
     private Pair<Pane, Button> lastExpanded;
-    private Styling styling;
-    private EmailHandler emailHandler;
 
     /***
      * Constructor for the SettleDebtsScreen
@@ -50,21 +48,16 @@ public class SettleDebtsScreenCtrl implements Initializable, SimpleRefreshable {
      * @param translation the translation to use
      * @param utils the server utilities to use
      * @param imageUtils the image utilities to use
-     * @param styling the styling utilities to use
-     * @param emailHandler the email handler to use
      */
     @Inject
     public SettleDebtsScreenCtrl(MainCtrl mainCtrl, Translation translation,
-                                 SettleDebtsUtils utils, ImageUtils imageUtils,
-                EmailHandler emailHandler, Styling styling) {
+                                 SettleDebtsUtils utils, ImageUtils imageUtils) {
         this.mainCtrl = mainCtrl;
         this.translation = translation;
         this.utils = utils;
         this.imageUtils = imageUtils;
         this.event = null;
         this.lastExpanded = null;
-        this.styling = styling;
-        this.emailHandler = emailHandler;
     }
 
     /***
@@ -104,9 +97,7 @@ public class SettleDebtsScreenCtrl implements Initializable, SimpleRefreshable {
 
             Label transferLabel = generateTransferLabel(transfer);
             Button settleButton = generateSettleButton(transfer);
-            Button emailInstructionsButton = generateSendEmailButton(transfer);
-            HBox transferBox = generateTransferDetailsBox
-                    (expandButton, transferLabel, settleButton,emailInstructionsButton);
+            HBox transferBox = generateTransferDetailsBox(expandButton, transferLabel, settleButton);
 
             children.addLast(transferBox);
             children.addLast(bankDetailsPane);
@@ -130,7 +121,7 @@ public class SettleDebtsScreenCtrl implements Initializable, SimpleRefreshable {
         pane.getChildren().add(text);
         pane.setVisible(false);
         pane.setManaged(false);
-        styling.applyStyling(pane, "borderVBox");
+        Styling.applyStyling(pane, "borderVBox");
         pane.setMaxWidth(400);
         return pane;
     }
@@ -146,7 +137,7 @@ public class SettleDebtsScreenCtrl implements Initializable, SimpleRefreshable {
         text.setEditable(false);
         text.setPrefRowCount(4);
         text.setFont(new Font(14));
-        styling.applyStyling(text, "backgroundLight");
+        Styling.applyStyling(text, "backgroundLight");
         return text;
     }
 
@@ -155,15 +146,14 @@ public class SettleDebtsScreenCtrl implements Initializable, SimpleRefreshable {
      * @param expandButton the Expand Details button
      * @param transferLabel the Label detailing who should send money to who
      * @param settleButton the Mark Received button
-     * @param emailInstructionsButton the Send Email Instructions button
      * @return an HBox containing all given elements, plus the correct spacing
      */
-    public HBox generateTransferDetailsBox(Button expandButton, Label transferLabel, Button settleButton, Button emailInstructionsButton){
+    public HBox generateTransferDetailsBox(Button expandButton, Label transferLabel, Button settleButton){
         Region spacingL = new Region();
         HBox.setHgrow(spacingL, Priority.ALWAYS);
         Region spacingR = new Region();
         HBox.setHgrow(spacingR, Priority.ALWAYS);
-        HBox box = new HBox(expandButton, spacingL, transferLabel, spacingR, settleButton, emailInstructionsButton);
+        HBox box = new HBox(expandButton, spacingL, transferLabel, spacingR, settleButton);
         box.setSpacing(20);
         box.setAlignment(CENTER_LEFT);
         return box;
@@ -178,7 +168,7 @@ public class SettleDebtsScreenCtrl implements Initializable, SimpleRefreshable {
     public Button generateSettleButton(Transfer transfer) {
         Button button = new Button();
         button.textProperty().bind(translation.getStringBinding("SettleDebts.Button.received"));
-        styling.applyStyling(button, "positiveButton");
+        Styling.applyStyling(button, "positiveButton");
         EventHandler<ActionEvent> onClick = utils.createSettleAction(transfer, event.getId());
         button.setOnAction(onClick);
 
@@ -193,7 +183,7 @@ public class SettleDebtsScreenCtrl implements Initializable, SimpleRefreshable {
      */
     public Button generateExpandButton(Pane pane, ImageView expandButtonInnerImage) {
         Button button = new Button();
-        styling.applyStyling(button, "positiveButton");
+        Styling.applyStyling(button, "positiveButton");
         button.setGraphic(expandButtonInnerImage);
         button.setOnMouseClicked((action)-> {
             pane.setVisible(!pane.isVisible());
@@ -220,29 +210,6 @@ public class SettleDebtsScreenCtrl implements Initializable, SimpleRefreshable {
         ObservableValue<String> transferString = utils.createTransferString(transfer);
         label.textProperty().bind(transferString);
         return label;
-    }
-
-    /**
-     * Generates a button for sending payment requests via email
-     * @param transfer the transfer to send the email for
-     * @return a button that sends an email with payment instructions
-     */
-    public Button generateSendEmailButton(Transfer transfer) {
-        Button button = new Button();
-        button.textProperty().bind
-            (translation.getStringBinding("SettleDebts.Button.sendEmailInstructions"));
-        styling.applyStyling(button, "positiveButton");
-        if (transfer.sender().getEmail().isEmpty() || !emailHandler.isConfigured()){
-            styling.applyStyling(button, "disabledButton");
-        }else{
-            button.setOnAction((action) -> {
-                Thread thread = new Thread(() -> {
-                    utils.sendEmailTransferEmail(transfer);
-                });
-                thread.start();
-            });
-        }
-        return button;
     }
 
     /***

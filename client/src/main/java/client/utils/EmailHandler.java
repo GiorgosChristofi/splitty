@@ -1,8 +1,6 @@
 package client.utils;
 
-import com.google.inject.Inject;
 import commons.Event;
-import javafx.scene.control.Alert;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -20,18 +18,14 @@ public class EmailHandler {
     private boolean smtpAuth;
     private boolean smtpStarttlsEnable;
     private ConfigUtils configUtils;
-    private Translation translation;
 
     /**
      * Constructor
-     * @param translation Translation object
      */
-    @Inject
-    public EmailHandler(Translation translation) {
+    public EmailHandler() {
         isConfigured = false;
         configUtils = new ConfigUtils();
         this.javaMailSender = createJavaMailSender();
-        this.translation = translation;
     }
 
     /**
@@ -160,30 +154,5 @@ public class EmailHandler {
      */
     public void setConfigUtils(ConfigUtils configUtils) {
         this.configUtils = configUtils;
-    }
-
-    /**
-     * Shows a successfully sent email prompt
-     */
-    public void showSuccessPrompt(){
-        System.out.println("Successfully sent email!");
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.contentTextProperty().bind(translation.getStringBinding("Event.Label.EmailFeedback.Success"));
-        a.titleProperty().bind(translation.getStringBinding("Email.SuccessTitle"));
-        a.headerTextProperty().bind(translation.getStringBinding("Email.EmailFeedback"));
-        a.show();
-    }
-
-    /**
-     * Shows a failed sending email prompt
-     */
-
-    public void showFailPrompt(){
-        System.out.println("Error while sending email!");
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.contentTextProperty().bind(translation.getStringBinding("Event.Label.EmailFeedback.Fail"));
-        a.titleProperty().bind(translation.getStringBinding("Email.ErrorTitle"));
-        a.headerTextProperty().bind(translation.getStringBinding("Email.EmailFeedback"));
-        a.show();
     }
 }
